@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.demo.controller;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -8,8 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,9 +33,9 @@ public class ProjectController {
 	@GetMapping("/project")
 	public ModelAndView list() {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("projects", projectService.getListProject());
 		modelAndView.setViewName("listproject");
@@ -48,9 +46,9 @@ public class ProjectController {
 	public ModelAndView add() {
 //		staff.setDepartmentId(departmentId);
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("project", new Project());
 		modelAndView.setViewName("projectform");
@@ -60,9 +58,9 @@ public class ProjectController {
 	@GetMapping("/project/{id}/edit")
 	public ModelAndView edit(@PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("project", projectService.getProjecByiD(id));
 		modelAndView.setViewName("projectform");
@@ -96,9 +94,9 @@ public class ProjectController {
 	public ModelAndView detail(@PathVariable int id) {
 
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 
 		modelAndView.addObject("project", projectService.getProjecByiD(id));
 
@@ -109,9 +107,10 @@ public class ProjectController {
 	@GetMapping(value = "/project/{id}/task")
 	public ModelAndView getTask(@PathVariable int id,RedirectAttributes redirect) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
+		
 		modelAndView.addObject("project", projectService.getProjecByiD(id));
 		modelAndView.addObject("tasks", projectService.getListTaskOfProject(id));
 		modelAndView.setViewName("listtaskofproject");
@@ -123,9 +122,9 @@ public class ProjectController {
 	@GetMapping(value = "/project/{id}/staff")
 	public ModelAndView getstaff(@PathVariable int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("project", projectService.getProjecByiD(id));
 		modelAndView.addObject("staffs", projectService.getListStaffOfProject(id));
@@ -137,9 +136,9 @@ public class ProjectController {
 	@GetMapping(value = "/project/{id}/staff/add")
 	public ModelAndView addStaffProject(@PathVariable int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("project", projectService.getProjecByiD(id));
 		List<Staff> listStaff = projectService.getListStaffNotInProject(id);

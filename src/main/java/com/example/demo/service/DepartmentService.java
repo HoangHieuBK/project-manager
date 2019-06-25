@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Staff;
@@ -10,10 +11,12 @@ public interface DepartmentService {
 
 	Department findDepartment(String accountName);
 	
-	Department findDepartmentById(int id);
+	Optional<Department> findDepartmentById(int id);
 	
 	Department saveDepartment(Department department);
 	
+	Department updateDepartment(Department department);
+
 	boolean deleteDepartment(int id);
 	
 	boolean getAmoutStaff(int id);

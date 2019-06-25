@@ -1,12 +1,11 @@
-package com.example.controller;
+package com.example.demo.controller;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.dto.AccountDTO;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Staff;
@@ -42,9 +42,9 @@ public class StaffController {
 	@GetMapping("/staff")
 	public ModelAndView list() {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("staffs", staffService.findAll());
 		modelAndView.setViewName("liststaff");
@@ -54,11 +54,11 @@ public class StaffController {
 	@GetMapping("/staff/add")
 	public ModelAndView add() {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
-		List<Account> listAccount = accountService.findAllAccount();
+		List<AccountDTO> listAccount = accountService.findAllAccount();
 		Map<Integer, String> accounts = new HashMap<>();
 		listAccount.forEach(item -> accounts.put(item.getAccountId(), item.getAccountName()));
 		modelAndView.addObject("accounts", accounts);
@@ -76,9 +76,9 @@ public class StaffController {
 	@GetMapping("/staff/{id}/edit")
 	public ModelAndView edit(@PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("staff", staffService.findOne(id));
 		modelAndView.addObject("departments", departmentService.findAllDepartment());
@@ -115,9 +115,9 @@ public class StaffController {
 	public ModelAndView detail(@PathVariable int id) {
 		
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		if(staffService.findOne(id) == null) {
 			modelAndView.setViewName("error/404");
 		}else {
@@ -130,9 +130,9 @@ public class StaffController {
 	@GetMapping(value = "project/{id}/staff/{idstaff}/task")
 	public ModelAndView getTask(@PathVariable int id, @PathVariable int idstaff) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("project", projectService.getProjecByiD(id));
 		modelAndView.addObject("staff", staffService.findOne(idstaff));

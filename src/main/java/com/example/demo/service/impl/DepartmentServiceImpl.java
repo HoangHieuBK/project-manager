@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import com.example.demo.repository.DepartmentRepo;
 import com.example.demo.service.DepartmentService;
 
 @Service
-public class DepartmentServiceImpl implements DepartmentService{
+public class DepartmentServiceImpl implements DepartmentService {
 	@Autowired
 	private DepartmentRepo departmentRepo;
 
@@ -28,9 +29,9 @@ public class DepartmentServiceImpl implements DepartmentService{
 	}
 
 	@Override
-	public Department findDepartmentById(int id) {
+	public Optional<Department> findDepartmentById(int id) {
 		// TODO Auto-generated method stub
-		return departmentRepo.getOne(id);
+		return departmentRepo.findById(id);
 	}
 
 	@Override
@@ -39,6 +40,11 @@ public class DepartmentServiceImpl implements DepartmentService{
 			return departmentRepo.save(department);
 		}
 		return null;
+	}
+
+	@Override
+	public Department updateDepartment(Department department) {
+		return departmentRepo.save(department);
 	}
 
 	@Override
@@ -58,15 +64,16 @@ public class DepartmentServiceImpl implements DepartmentService{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public boolean checkDepartmentExistInDB(Department department) {
 		List<Department> listDepartment = departmentRepo.findAll();
-		if(listDepartment.isEmpty()) {
+		if (listDepartment.isEmpty()) {
 			return true;
 		}
-		for(int i=0; i<listDepartment.size();i++) {
-			if (department.getDepartmentName().equals(listDepartment.get(i).getDepartmentName()) && department.isCheck()) {
-				System.out.println("department name :"+ department.getDepartmentName() +"da ton tai");
+		for (int i = 0; i < listDepartment.size(); i++) {
+			if (department.getDepartmentName().equals(listDepartment.get(i).getDepartmentName())
+					&& department.isCheck()) {
+				System.out.println("department name :" + department.getDepartmentName() + "da ton tai");
 				return false;
 			}
 		}

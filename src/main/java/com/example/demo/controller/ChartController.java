@@ -1,12 +1,10 @@
-package com.example.controller;
+package com.example.demo.controller;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,9 +48,11 @@ public class ChartController {
 
 	@GetMapping("/task/{id}/displayBarGraph")
 	public String taskBarGraph(@PathVariable("id") int id, Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		model.addAttribute("username", name);
+		/*
+		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 * String name = auth.getName(); // get logged in username
+		 * model.addAttribute("username", name);
+		 */
 		Task task = taskService.findById(id);
 		List<TaskProgress> workLogList = taskProgressService.findByTaskIDOrderByDateCreateAsc(id);
 		List<Date> listDate;
@@ -72,9 +72,11 @@ public class ChartController {
 
 	@GetMapping("/displayPieChart")
 	public String pieChart(Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		model.addAttribute("username", name);
+		/*
+		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 * String name = auth.getName(); // get logged in username
+		 * model.addAttribute("username", name);
+		 */
 
 		List<Feedback> listFeedBack = feebackService.listfeedBack();
 		int demVeryGood = 0;
@@ -110,9 +112,11 @@ public class ChartController {
 	public ModelAndView save(@PathVariable("id") int id, @ModelAttribute("taskprogress") TaskProgress taskprogress,
 			RedirectAttributes redirect) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+		/*
+		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 * String name = auth.getName(); // get logged in username
+		 * modelAndView.addObject("username", name);
+		 */
 		
 		taskProgressService.createTaskProgress(taskprogress);
 		redirect.addFlashAttribute("notification", "bạn đã thực hiện ghi tiến độ thành công !");
@@ -123,9 +127,11 @@ public class ChartController {
 	@RequestMapping(value = "/task/{id}/taskprogress/save", method = RequestMethod.GET)
 	public ModelAndView add(@PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+		/*
+		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 * String name = auth.getName(); // get logged in username
+		 * modelAndView.addObject("username", name);
+		 */
 		Task task = taskService.findById(id);
 		Set<Task> previousTasks = task.getPreviousTask();
 		for (Task previousTask : previousTasks) {
@@ -142,9 +148,9 @@ public class ChartController {
 
 	@GetMapping("/project/{id}/progress")
 	public String projectBarGraph(@PathVariable("id") int id, Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		model.addAttribute("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+////		String name = auth.getName(); // get logged in username
+////		model.addAttribute("username", name);
 		Project project = projectService.findByProjectId(id);
 		List<ProjectProgress> workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
 		List<Date> listDate;

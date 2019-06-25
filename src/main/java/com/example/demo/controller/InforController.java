@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.demo.controller;
 
 import java.security.Principal;
 
@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,9 +30,9 @@ public class InforController {
 	@GetMapping(value = "/aboutteam")
 	public ModelAndView getInforTeam() {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.setViewName("intror/aboutteam");
 		return modelAndView;
@@ -43,9 +41,9 @@ public class InforController {
 	@GetMapping(value = "/aboutapp")
 	public ModelAndView getInforWeb() {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.setViewName("intror/aboutapp");
 		return modelAndView;
@@ -54,10 +52,10 @@ public class InforController {
 	@GetMapping(value = "/feedback/add")
 	public ModelAndView getInforWebFeedback() {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
-		
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
+//		
 		modelAndView.addObject("feedback", new Feedback());
 		modelAndView.setViewName("intror/feedback");
 		return modelAndView;
@@ -74,9 +72,9 @@ public class InforController {
 	@GetMapping(value = "/getfeedback")
 	public ModelAndView getAllWebFeedback() {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("feedbacks", feedback.listfeedBack());
 		modelAndView.setViewName("intror/listfeedback");
@@ -91,9 +89,9 @@ public class InforController {
 	@GetMapping(value = "/getfeedback/{id}/feedack")
 	public ModelAndView feedBack(@PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("feedback", feedback.getFeedBack(id));
 		modelAndView.setViewName("intror/quickemail");
@@ -103,9 +101,9 @@ public class InforController {
 	@PostMapping(value = "/getfeedback/{id}/feedack")
 	public ModelAndView sendreponsefeedBack(@PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("feedback", feedback.getFeedBack(id));
 		Feedback feedbackreponse = feedback.getFeedBack(id);

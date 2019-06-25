@@ -31,16 +31,18 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.validator.internal.IgnoreForbiddenApisErrors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *
  * @author lthung
  */
 @Entity
 @Table(name = "role")
-@NamedQueries({
-    @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
-    @NamedQuery(name = "Role.findByRoleId", query = "SELECT r FROM Role r WHERE r.roleId = :roleId"),
-    @NamedQuery(name = "Role.findByRoleName", query = "SELECT r FROM Role r WHERE r.roleName = :roleName")})
+@JsonIgnoreProperties(value = { "accountCollection" })
 public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,7 +53,7 @@ public class Role implements Serializable {
     @Basic(optional = false)
     @Column(name = "role_name")
     private String roleName;
-    @OneToMany(mappedBy = "roleId")
+    @OneToMany(mappedBy = "role")
     private Collection<Account> accountCollection;
 
     public Role() {

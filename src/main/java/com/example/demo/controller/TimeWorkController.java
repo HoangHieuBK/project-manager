@@ -1,12 +1,10 @@
-package com.example.controller;
+package com.example.demo.controller;
 
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,9 +31,9 @@ public class TimeWorkController {
 	@ResponseBody
 	public List<Events> getInfoTime(@PathVariable("id") int id,HttpSession request) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 		List<Events> listEvents = null;
 		try {
 		 listEvents = eventsService.findByIdStaff(id);

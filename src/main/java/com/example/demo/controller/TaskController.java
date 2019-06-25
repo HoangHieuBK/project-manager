@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.demo.controller;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -56,9 +54,9 @@ public class TaskController {
 	@GetMapping(value = "project/{idproject}/task/{id}/edit")
 	public ModelAndView edit(@PathVariable("idproject") int idproject, @PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 
 		Task task = taskService.findById(id);
 		modelAndView.addObject("task", task);
@@ -74,9 +72,9 @@ public class TaskController {
 	@GetMapping(value = "project/{id}/staff/{idstaff}/task/add")
 	public ModelAndView addTaskToStaff(@PathVariable("id") int id, @PathVariable("idstaff") int idstaff) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 
 		Task task = new Task();
 		task.setProjectId(projectService.getProjecByiD(id));
@@ -92,9 +90,9 @@ public class TaskController {
 	@GetMapping(value = "project/{idproject}/task/{id}/addsubtask")
 	public ModelAndView addSubTask(@PathVariable("idproject") int idproject, @PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 
 		modelAndView.addObject("project", projectService.getProjecByiD(idproject));
 
@@ -114,9 +112,9 @@ public class TaskController {
 	@GetMapping(value = "/task/detail/{id}")
 	public ModelAndView getTask(@PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String name = auth.getName(); // get logged in username
-		modelAndView.addObject("username", name);
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String name = auth.getName(); // get logged in username
+//		modelAndView.addObject("username", name);
 
 		modelAndView.addObject("task", taskService.findById(id));
 		modelAndView.setViewName("detailtask");

@@ -29,17 +29,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-/**
- *
- * @author lthung
- */
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "account")
-@NamedQueries({
-    @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a"),
-    @NamedQuery(name = "Account.findByAccountId", query = "SELECT a FROM Account a WHERE a.accountId = :accountId"),
-    @NamedQuery(name = "Account.findByAccountName", query = "SELECT a FROM Account a WHERE a.accountName = :accountName"),
-    @NamedQuery(name = "Account.findByPassword", query = "SELECT a FROM Account a WHERE a.password = :password")})
+@JsonIgnoreProperties(value = { "roleId","staffCollection"})
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -57,7 +51,7 @@ public class Account implements Serializable {
     private Collection<Staff> staffCollection;
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     @ManyToOne
-    private Role roleId;
+    private Role role;
     
     @Transient
     private boolean check = true;
@@ -115,12 +109,12 @@ public class Account implements Serializable {
         this.staffCollection = staffCollection;
     }
 
-    public Role getRoleId() {
-        return roleId;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleId(Role roleId) {
-        this.roleId = roleId;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
