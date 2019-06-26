@@ -81,7 +81,8 @@ public class AccountServiceImpl implements AccountService {
 			return true;
 		}
 		for (int i = 0; i < listAccount.size(); i++) {
-			if (account.getAccountName().equals(listAccount.get(i).getAccountName()) && account.isCheck()) {
+			boolean checkExist = (account.getAccountId() == listAccount.get(i).getAccountId() || account.getAccountName().equals(listAccount.get(i).getAccountName()));
+			if ( checkExist && account.isCheck()) {
 				System.out.println("account name :" + account.getAccountName() + "da ton tai");
 				return false;
 			}

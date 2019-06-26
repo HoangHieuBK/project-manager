@@ -58,7 +58,7 @@ public class StaffController {
 //		String name = auth.getName(); // get logged in username
 //		modelAndView.addObject("username", name);
 		
-		List<AccountDTO> listAccount = accountService.findAllAccount();
+		List<Account> listAccount = accountService.findAllAccount();
 		Map<Integer, String> accounts = new HashMap<>();
 		listAccount.forEach(item -> accounts.put(item.getAccountId(), item.getAccountName()));
 		modelAndView.addObject("accounts", accounts);

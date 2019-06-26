@@ -71,9 +71,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 			return true;
 		}
 		for (int i = 0; i < listDepartment.size(); i++) {
-			if (department.getDepartmentName().equals(listDepartment.get(i).getDepartmentName())
-					&& department.isCheck()) {
-				System.out.println("department name :" + department.getDepartmentName() + "da ton tai");
+			boolean checkExist = (department.getDepartmentId() == listDepartment.get(i).getDepartmentId() || department.getDepartmentName().equals(listDepartment.get(i).getDepartmentName()));
+			if ( checkExist && department.isCheck()) {
+				System.out.println("department id: "+ department.getDepartmentId() + ", name :" + department.getDepartmentName() + " da ton tai");
 				return false;
 			}
 		}

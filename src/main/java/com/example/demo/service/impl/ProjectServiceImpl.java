@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +29,15 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 
 	@Override
-	public void saveProject(Project project) {
+	public Project saveProject(Project project) {
 		// TODO Auto-generated method stub
-		projectRepo.save(project);
+		return projectRepo.save(project);
 	}
 
 	@Override
-	public Project getProjecByiD(int id) {
+	public Optional<Project> getProjecByiD(int id) {
 		// TODO Auto-generated method stub
-		return projectRepo.getOne(id);
+		return projectRepo.findById(id);
 	}
 
 	@Override

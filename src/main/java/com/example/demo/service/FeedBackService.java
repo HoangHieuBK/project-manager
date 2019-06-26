@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.entity.Feedback;
 
@@ -9,5 +10,5 @@ public interface FeedBackService {
 	
 	Feedback saveFeedback(Feedback feedback);
 	
-	Feedback getFeedBack(int id);
+	Optional<Feedback> getFeedBack(int id);
 }

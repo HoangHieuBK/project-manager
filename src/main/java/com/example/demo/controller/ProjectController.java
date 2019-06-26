@@ -4,18 +4,26 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,71 +32,55 @@ import com.example.demo.entity.Staff;
 import com.example.demo.entity.Task;
 import com.example.demo.service.ProjectService;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@RequestMapping("/projects")
 public class ProjectController {
 
 	@Autowired
 	private ProjectService projectService;
 
-	@GetMapping("/project")
-	public ModelAndView list() {
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-		
-		modelAndView.addObject("projects", projectService.getListProject());
-		modelAndView.setViewName("listproject");
-		return modelAndView;
+	@GetMapping("/")
+	public List<Project> listProject() {
+		List<Project> listProject = projectService.getListProject();
+		return listProject;
 	}
 
-	@GetMapping("/project/add")
-	public ModelAndView add() {
-//		staff.setDepartmentId(departmentId);
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-		
-		modelAndView.addObject("project", new Project());
-		modelAndView.setViewName("projectform");
-		return modelAndView;
+	@PostMapping("add")
+	public ResponseEntity<Project> addProject(@RequestBody Project project) {
+		return new ResponseEntity<>(projectService.saveProject(project), HttpStatus.OK);
 	}
 
-	@GetMapping("/project/{id}/edit")
-	public ModelAndView edit(@PathVariable("id") int id) {
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-		
-		modelAndView.addObject("project", projectService.getProjecByiD(id));
-		modelAndView.setViewName("projectform");
-		return modelAndView;
+	@PutMapping("edit/{id}")
+	public ResponseEntity<Project> editProject(@PathVariable("id") int id, @RequestBody Project project) {
+
+		System.out.println("Update project with ID = " + id + "...");
+
+		Optional<Project> projectData = projectService.getProjecByiD(id);
+
+		if (projectData.isPresent()) {
+			Project _project = projectData.get();
+			_project.setProjectName(project.getProjectName());
+			_project.setCreateDate(project.getCreateDate());
+			_project.setStartDate(project.getStartDate());
+			_project.setDeadlineDate(project.getDeadlineDate());
+			_project.setFinishDate(project.getFinishDate());
+			_project.setDiscription(project.getDiscription());
+			_project.setProjectState(project.getProjectState());
+			_project.setProjectOutput(project.getProjectOutput());
+			return new ResponseEntity<>(projectService.saveProject(_project), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
-	@RequestMapping(value = "/project/save", method = RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute("project") Project project,RedirectAttributes redirect) {
 
-		projectService.saveProject(project);
-		redirect.addFlashAttribute("notification","bạn đã thực hiện thành công !");
-		return new ModelAndView("redirect:/project");
-	}
-
-	@GetMapping("/project/{id}/delete")
-	public String delete(@PathVariable int id, RedirectAttributes redirect) {
+	@DeleteMapping("delete/{id}")
+	public ResponseEntity<Project> deleteProject(@PathVariable int id) {
+		System.out.println("Delete project with ID = " + id + "...");
 		projectService.deleteProjectById(id);
-		redirect.addFlashAttribute("successMessage", "Deleted staff successfully!");
-		return "redirect:/project";
+		return new ResponseEntity<>(HttpStatus.OK);   
 	}
-
-//	@GetMapping("/project/search")
-//	public String search(@RequestParam("key") String key) {
-//		List<Project> list = projectService.;
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.addObject("staffs", list);
-//		return "redirect:/staff";
-//	}
 
 	@RequestMapping(value = "/project/detail/{id}", method = RequestMethod.GET)
 	public ModelAndView detail(@PathVariable int id) {
@@ -178,7 +170,7 @@ public class ProjectController {
 		taskList.forEach(item -> listPreviousTask.put(item.getTaskId(), item.getTaskName()));
 		model.addAttribute("listPreviousTask", listPreviousTask);
 		Task task = new Task();
-		task.setProjectId(projectService.getProjecByiD(id));
+		task.setProjectId(projectService.getProjecByiD(id).get());
 		model.addAttribute("task", task);
 		return "taskform";
 	}

@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import com.example.demo.entity.Department;
 import com.example.demo.service.DepartmentService;
@@ -32,7 +30,7 @@ public class DepartmentController {
 	@Autowired
 	private DepartmentService departmentService;
 
-	@GetMapping(value = { "/" })
+	@GetMapping("/")
 	public List<Department> getAllDepartment() {
 		List<Department> listDepartment = departmentService.findAllDepartment();
 		return listDepartment;
