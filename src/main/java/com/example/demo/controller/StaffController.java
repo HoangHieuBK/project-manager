@@ -5,18 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.dto.AccountDTO;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Staff;
@@ -25,7 +24,9 @@ import com.example.demo.service.DepartmentService;
 import com.example.demo.service.ProjectService;
 import com.example.demo.service.StaffService;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@RequestMapping("/staffs")
 public class StaffController {
 	@Autowired
 	private StaffService staffService;
@@ -42,9 +43,6 @@ public class StaffController {
 	@GetMapping("/staff")
 	public ModelAndView list() {
 		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
 		
 		modelAndView.addObject("staffs", staffService.findAll());
 		modelAndView.setViewName("liststaff");

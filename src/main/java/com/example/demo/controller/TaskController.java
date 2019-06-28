@@ -77,7 +77,7 @@ public class TaskController {
 //		modelAndView.addObject("username", name);
 
 		Task task = new Task();
-		task.setProjectId(projectService.getProjecByiD(id));
+		task.setProjectId(projectService.getProjecByiD(id).get());
 		modelAndView.addObject("task", task);
 		Map<Integer, String> staffs = new HashMap<>();
 		Staff staff = staffService.findOne(idstaff);
