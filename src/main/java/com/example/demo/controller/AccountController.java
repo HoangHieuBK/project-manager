@@ -54,7 +54,7 @@ public class AccountController {
 			Account _account = accountData.get();
 			_account.setAccountName(account.getAccountName());
 			_account.setPassword(account.getPassword());
-			_account.setRole(account.getRole());
+//			_account.setRole(account.getRole());
 			return new ResponseEntity<>(accountService.updateAccount(_account), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
