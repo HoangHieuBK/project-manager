@@ -1,76 +1,110 @@
-//package com.example.demo.controller;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import javax.validation.Valid;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.validation.BindingResult;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.servlet.ModelAndView;
-//
-//import com.example.demo.entity.Account;
-//import com.example.demo.service.AccountService;
-//
-//@Controller
-//public class LoginController {
-//
-//	@Autowired
-//	private AccountService accountService;
-//
-//	@GetMapping(value = { "/", "/login" })
-//	public ModelAndView loginpage() {
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("login");
-//		return modelAndView;
-//	}
-//
-//	@GetMapping(value = "/registration")
-//	public ModelAndView register() {
-//		ModelAndView modelAndView = new ModelAndView();
-//		Account account = new Account();
-//		modelAndView.addObject("account", account);
-//		modelAndView.setViewName("registration");
-//		return modelAndView;
-//	}
-//
-//	@PostMapping(value = "/registration")
-//	public ModelAndView createNewUser(@Valid Account account, BindingResult bindingResult) {
-//		ModelAndView modelAndView = new ModelAndView();
-//		Account accountExist = accountService.findAccountByAccountName(account.getAccountName());
-//		if (accountExist != null) {
-//			bindingResult.rejectValue("account", "error.email", "this is user with email name have exist in DB !");
-//		}
-//		if (bindingResult.hasErrors()) {
-//			modelAndView.setViewName("registration");
-//		} else {
-//			accountService.saveAccount(account);
-//			modelAndView.addObject("successfull", "User add successfull !");
-//			modelAndView.addObject("account", new Account());
-//			modelAndView.setViewName("registration");
-//		}
-//		return modelAndView;
-//	}
-//
-//	@GetMapping(value = "/welcome")
-//	public ModelAndView home() {
-//		ModelAndView modelAndView = new ModelAndView();
-////		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-////		Account account = accountService.findAccountByAccountName(auth.getName());
-////		modelAndView.addObject("accountName", account.getAccountName());
-//		
-//		modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
-//		modelAndView.setViewName("welcome");
-//		return modelAndView;
-//	}
-//
-//	@GetMapping(value = "/logout")
-//	public ModelAndView logout(HttpServletRequest request) {
-//		request.getSession().removeAttribute("staff");
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.addObject("logout", true);
-//		modelAndView.setViewName("redirect:/login");
-//		return modelAndView;
-//	}
-//}
+package com.example.demo.controller;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.JwtResponse;
+import com.example.demo.dto.LoginForm;
+import com.example.demo.dto.ResponseMessage;
+import com.example.demo.dto.SignUpForm;
+import com.example.demo.entity.Account;
+import com.example.demo.entity.Role;
+import com.example.demo.entity.RoleName;
+import com.example.demo.repository.AccountRepo;
+import com.example.demo.repository.RoleRepo;
+import com.example.demo.security.jwt.JwtProvider;
+
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController
+@RequestMapping("/api/auth")
+public class LoginController {
+
+	@Autowired
+	AuthenticationManager authenticationManager;
+
+	@Autowired
+	AccountRepo accountRepo;
+
+	@Autowired
+	RoleRepo roleRepo;
+
+	@Autowired
+	PasswordEncoder encoder;
+
+	@Autowired
+	JwtProvider jwtProvider;
+
+	// dang nhap
+	@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
+
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getAccountName(), loginRequest.getPassword()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		String jwt = jwtProvider.generateJwtToken(authentication);
+		UserDetails accountDetails = (UserDetails) authentication.getPrincipal();
+
+		return ResponseEntity.ok(new JwtResponse(jwt, accountDetails.getUsername(), accountDetails.getAuthorities()));
+	}
+
+	// dang ky
+	@PostMapping("/signup")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
+		if (accountRepo.existsByAccountName(signUpRequest.getAccountName())) {
+			return new ResponseEntity<>(new ResponseMessage("Fail -> Accountname is already taken!"),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		if (accountRepo.existsByEmail(signUpRequest.getEmail())) {
+			return new ResponseEntity<>(new ResponseMessage("Fail -> Email is already in use!"),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		// Creating user's account
+		Account account = new Account(signUpRequest.getAccountName(), signUpRequest.getEmail(),
+				encoder.encode(signUpRequest.getPassword()));
+
+		Set<String> strRoles = signUpRequest.getRole();
+		Set<Role> roles = new HashSet<>();
+        
+		strRoles.forEach(role -> {
+			switch (role) {
+			case "admin":
+				Role adminRole = roleRepo.findByName(RoleName.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find."));
+				roles.add(adminRole);
+				break;
+			case "pm": 
+				Role pmRole = roleRepo.findByName(RoleName.ROLE_PM).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+				roles.add(pmRole);
+				break;
+			default:
+				Role staffRole = roleRepo.findByName(RoleName.ROLE_USER).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+				roles.add(staffRole);
+			}
+		});
+		
+		account.setRoles(roles);
+		accountRepo.save(account);
+		
+		return new ResponseEntity<>(new ResponseMessage("Account registered successfully!"), HttpStatus.OK);
+	}
+}
