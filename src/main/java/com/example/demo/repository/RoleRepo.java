@@ -10,6 +10,6 @@ import com.example.demo.entity.RoleName;
 @Repository
 public interface RoleRepo extends JpaRepository<Role, Integer> {
 
-	Optional<Role> findByName(RoleName roleName);
+	Optional<Role> findByRoleName(RoleName roleName);
 
 }

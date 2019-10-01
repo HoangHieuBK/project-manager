@@ -89,15 +89,15 @@ public class LoginController {
 		strRoles.forEach(role -> {
 			switch (role) {
 			case "admin":
-				Role adminRole = roleRepo.findByName(RoleName.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find."));
+				Role adminRole = roleRepo.findByRoleName(RoleName.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find."));
 				roles.add(adminRole);
 				break;
 			case "pm": 
-				Role pmRole = roleRepo.findByName(RoleName.ROLE_PM).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+				Role pmRole = roleRepo.findByRoleName(RoleName.ROLE_PM).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
 				roles.add(pmRole);
 				break;
 			default:
-				Role staffRole = roleRepo.findByName(RoleName.ROLE_USER).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+				Role staffRole = roleRepo.findByRoleName(RoleName.ROLE_USER).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
 				roles.add(staffRole);
 			}
 		});
