@@ -19,15 +19,18 @@ package com.example.demo.entity;
  */
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NaturalId;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -35,21 +38,23 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author lthung
  */
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 @JsonIgnoreProperties(value = { "accountCollection" })
 public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "role_id")
     private Integer roleId;
+    
+    @Enumerated(EnumType.STRING)
+    @NaturalId
     @Basic(optional = false)
     @Column(name = "role_name")
-    private String roleName;
-    @OneToMany(mappedBy = "role")
-    private Collection<Account> accountCollection;
-
+    private RoleName roleName;
+    
     public Role() {
     }
 
@@ -57,7 +62,11 @@ public class Role implements Serializable {
         this.roleId = roleId;
     }
 
-    public Role(Integer roleId, String roleName) {
+    public Role(RoleName name) {
+        this.roleName = name;
+    }
+    
+    public Role(Integer roleId, RoleName roleName) {
         this.roleId = roleId;
         this.roleName = roleName;
     }
@@ -70,20 +79,12 @@ public class Role implements Serializable {
         this.roleId = roleId;
     }
 
-    public String getRoleName() {
+    public RoleName getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(String roleName) {
+    public void setRoleName(RoleName roleName) {
         this.roleName = roleName;
-    }
-
-    public Collection<Account> getAccountCollection() {
-        return accountCollection;
-    }
-
-    public void setAccountCollection(Collection<Account> accountCollection) {
-        this.accountCollection = accountCollection;
     }
 
     @Override

@@ -23,8 +23,7 @@ public class AccountServiceImpl implements AccountService {
 //	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
-	public Account findAccountByAccountName(String accountName) {
-
+	public Optional<Account> findAccountByAccountName(String accountName) {
 		return accountRepo.findAccountByAccountName(accountName);
 	}
 
@@ -32,9 +31,9 @@ public class AccountServiceImpl implements AccountService {
 	public Account saveAccount(Account account) {
 		account.setPassword(account.getPassword());
 //		Role accountRole = roleRepo.findByRoleName("ADMIN");
-		Role accountRole = accountRepo.getRole(account.getRole().getRoleId());
-		System.out.println(accountRole.getRoleName() + "dung null nhe !");
-		account.setRole(accountRole);
+//		Role accountRole = accountRepo.getRole(account.getRole().getRoleId());
+//		System.out.println(accountRole.getRoleName() + "dung null nhe !");
+//		account.setRole(accountRole);
 		if (checkEmailExistInDB(account)) {
 			return accountRepo.save(account);
 		}

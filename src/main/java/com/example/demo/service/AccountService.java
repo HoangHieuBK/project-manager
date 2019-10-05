@@ -10,7 +10,7 @@ import com.example.demo.entity.Role;
 public interface AccountService {
 	List<Account> findAllAccount();
 
-	Account findAccountByAccountName(String accountName);
+	Optional<Account> findAccountByAccountName(String accountName);
 
 	Account saveAccount(Account account);
 	
