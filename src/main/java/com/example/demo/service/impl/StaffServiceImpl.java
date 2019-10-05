@@ -22,10 +22,10 @@ public class StaffServiceImpl implements StaffService {
 	// private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
-	public void save(Staff staff) {
+	public Staff save(Staff staff) {
 		// user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		// user.setRoleSet(new HashSet<>(roleRepository.findAll()));
-		staffRepository.save(staff);
+		return staffRepository.save(staff);
 	}
 
 	@Override

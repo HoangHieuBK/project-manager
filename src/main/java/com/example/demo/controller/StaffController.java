@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Department;
+import com.example.demo.entity.Project;
 import com.example.demo.entity.Staff;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.DepartmentService;
@@ -40,35 +45,15 @@ public class StaffController {
 	@Autowired
 	private ProjectService projectService;
 
-	@GetMapping("/staff")
-	public ModelAndView list() {
-		ModelAndView modelAndView = new ModelAndView();
-		
-		modelAndView.addObject("staffs", staffService.findAll());
-		modelAndView.setViewName("liststaff");
-		return modelAndView;
+	@GetMapping("/")
+	public List<Staff> listStaff() {
+		List<Staff> listStaff = staffService.findAll();
+		return listStaff;
 	}
 
-	@GetMapping("/staff/add")
-	public ModelAndView add() {
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-		
-		List<Account> listAccount = accountService.findAllAccount();
-		Map<Integer, String> accounts = new HashMap<>();
-		listAccount.forEach(item -> accounts.put(item.getAccountId(), item.getAccountName()));
-		modelAndView.addObject("accounts", accounts);
-
-		List<Department> listDepartment = departmentService.findAllDepartment();
-		Map<Integer, String> departments = new HashMap<>();
-		listDepartment.forEach(item -> departments.put(item.getDepartmentId(), item.getDepartmentName()));
-		modelAndView.addObject("departments", departments);
-		
-		modelAndView.addObject("staff", new Staff());
-		modelAndView.setViewName("staffform");
-		return modelAndView;
+	@PostMapping("addStaff")
+	public ResponseEntity<Staff> addStaff(@RequestBody Staff staff) {
+		return new ResponseEntity<>(staffService.save(staff), HttpStatus.OK);
 	}
 
 	@GetMapping("/staff/{id}/edit")
@@ -85,7 +70,7 @@ public class StaffController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/staff/save", method = RequestMethod.POST)
+	@RequestMapping(value = "/sta-ff/save", method = RequestMethod.POST)
 	public ModelAndView save(@ModelAttribute("staff") Staff staff,RedirectAttributes redirect) {
 		ModelAndView modelAndView = new ModelAndView();
 		staffService.save(staff);

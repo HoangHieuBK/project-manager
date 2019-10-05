@@ -14,7 +14,7 @@ public interface StaffService {
 
 	Staff findOne(int id);
 
-	void save(Staff staff);
+	Staff save(Staff staff);
 
 	void delete(int id);
 	
