@@ -20,6 +20,8 @@ public class AccountPrinciple implements UserDetails {
 	
 	private String accountName;
 	
+	private String username;
+	
 	private String email;
 	
 	@JsonIgnore
@@ -28,11 +30,12 @@ public class AccountPrinciple implements UserDetails {
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	
-	public AccountPrinciple(Integer id, String accountName, String email, String password,
+	public AccountPrinciple(Integer id, String accountName, String username, String email, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.id = id;
 		this.accountName = accountName;
+        this.username = username;
 		this.email = email;
 		this.password = password;
 		this.authorities = authorities;
@@ -47,6 +50,7 @@ public class AccountPrinciple implements UserDetails {
 		return new AccountPrinciple(
 				account.getAccountId(),
 				account.getAccountName(),
+				account.getUsername(),
 				account.getEmail(),
 				account.getPassword(),
 				authorities
@@ -57,6 +61,10 @@ public class AccountPrinciple implements UserDetails {
         return id;
     }
  
+    public String getAccountName() {
+        return accountName;
+    }
+    
     public String getEmail() {
         return email;
     }
@@ -73,7 +81,7 @@ public class AccountPrinciple implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return accountName;
+		return username;
 	}
 
 	@Override

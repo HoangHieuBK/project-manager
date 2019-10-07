@@ -41,7 +41,7 @@ import org.hibernate.annotations.NaturalId;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "account", uniqueConstraints = { @UniqueConstraint(columnNames = { "account_name" }),
+@Table(name = "account", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
 		@UniqueConstraint(columnNames = { "email" }) })
 @JsonIgnoreProperties(value = { "roleId", "staffCollection" })
 public class Account implements Serializable {
@@ -58,9 +58,15 @@ public class Account implements Serializable {
 	@Column(name = "account_name")
 	private String accountName;
 
+    @NotBlank
+    @Size(min=3, max = 50)
+    @Column(name = "username")
+    private String username;
+    
 	@NaturalId
 	@NotBlank
 	@Size(max = 50)
+	@Column(name = "email")
 	@Email
 	private String email;
 
@@ -95,8 +101,9 @@ public class Account implements Serializable {
 		this.accountId = accountId;
 	}
 
-	public Account(String accountName, String email, String password) {
+	public Account(String accountName, String username, String email, String password) {
 		this.accountName = accountName;
+        this.username = username;
 		this.email = email;
 		this.password = password;
 	}
@@ -109,6 +116,15 @@ public class Account implements Serializable {
 		this.accountId = accountId;
 	}
 
+    public String getUsername() {
+        return username;
+    }
+ 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    
 	public String getAccountName() {
 		return accountName;
 	}

@@ -1,13 +1,11 @@
 package com.example.demo.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.AccountDTO;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Role;
 import com.example.demo.repository.AccountRepo;
@@ -24,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Optional<Account> findAccountByAccountName(String accountName) {
-		return accountRepo.findAccountByAccountName(accountName);
+		return accountRepo.findAccountByUsername(accountName);
 	}
 
 	@Override

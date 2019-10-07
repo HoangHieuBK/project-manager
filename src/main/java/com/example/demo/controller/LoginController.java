@@ -56,21 +56,21 @@ public class LoginController {
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getAccountName(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String jwt = jwtProvider.generateJwtToken(authentication);
-		UserDetails accountDetails = (UserDetails) authentication.getPrincipal();
+		UserDetails userDetails  = (UserDetails) authentication.getPrincipal();
 
-		return ResponseEntity.ok(new JwtResponse(jwt, accountDetails.getUsername(), accountDetails.getAuthorities()));
+		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities()));
 	}
 
 	// dang ky
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
-		if (accountRepo.existsByAccountName(signUpRequest.getAccountName())) {
-			return new ResponseEntity<>(new ResponseMessage("Fail -> Accountname is already taken!"),
+		if (accountRepo.existsByUsername(signUpRequest.getUsername())) {
+			return new ResponseEntity<>(new ResponseMessage("Fail -> username is already taken!"),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -80,7 +80,7 @@ public class LoginController {
 		}
 
 		// Creating user's account
-		Account account = new Account(signUpRequest.getAccountName(), signUpRequest.getEmail(),
+		Account account = new Account(signUpRequest.getAccountName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
 				encoder.encode(signUpRequest.getPassword()));
 
 		Set<String> strRoles = signUpRequest.getRole();

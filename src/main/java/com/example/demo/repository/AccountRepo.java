@@ -13,8 +13,8 @@ import com.example.demo.entity.Role;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Integer>{
-	Optional<Account> findAccountByAccountName(String accountName);
-	Boolean existsByAccountName(String accountName);
+	Optional<Account> findAccountByUsername(String username);
+	Boolean existsByUsername(String username);
 	Boolean existsByEmail(String email);
 	
 	@Query("select r from Role r where r.roleId = :roleId")
