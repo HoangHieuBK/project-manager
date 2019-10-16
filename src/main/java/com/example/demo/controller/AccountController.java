@@ -57,14 +57,37 @@ public class AccountController {
 		List<Account> listAccount = accountService.findAllAccount();
 		return listAccount;
 	}
-	
+
 	// get 1 account chi tiet
 	@GetMapping("/accounts/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> getAccountById(@PathVariable int id) {
 		Optional<Account> accountData = accountService.getAccountByID(id);
 		if(accountData.isPresent()) {
-			return new ResponseEntity<>(accountData.get(), HttpStatus.OK);
+			Account account = accountData.get();
+			SignUpForm signUpResponse = new SignUpForm(account.getAccountName(), account.getUsername(), account.getEmail(), account.getPassword());
+			Set<Role> roles = account.getRoles();
+			Set<String> strRoles = new HashSet<String>();
+			
+			roles.forEach(role -> {
+				switch (role.getRoleName()) {
+				case ROLE_ADMIN:
+					strRoles.add("admin");
+					break;
+				case ROLE_PM: 
+					strRoles.add("pm");
+					break;
+				case ROLE_USER:
+					strRoles.add("user");
+					break;
+				default:
+					break;
+				}
+			});
+			
+			signUpResponse.setRole(strRoles);
+			return new ResponseEntity<>(signUpResponse, HttpStatus.OK);
+			
 		} else {
 			return new ResponseEntity<>(new ResponseMessage("Account not found!"), HttpStatus.NOT_FOUND);
 		}
@@ -127,8 +150,11 @@ public class AccountController {
 
 		if (accountData.isPresent()) {
 			Account _account = accountData.get();
-			_account.setPassword(encoder.encode(signUpRequest.getPassword()));
-			
+
+			if (!_account.getPassword().equals(signUpRequest.getPassword())) {
+				_account.setPassword(encoder.encode(signUpRequest.getPassword()));
+			}
+
 			Set<String> strRoles = signUpRequest.getRole();
 			Set<Role> roles = new HashSet<>();
 			strRoles.forEach(role -> {
@@ -152,7 +178,7 @@ public class AccountController {
 
 			_account.setRoles(roles);
 			accountService.updateAccount(_account);
-			
+
 			return new ResponseEntity<>(new ResponseMessage("Edit account successfully!"), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(new ResponseMessage("Account not found!"), HttpStatus.NOT_FOUND);
