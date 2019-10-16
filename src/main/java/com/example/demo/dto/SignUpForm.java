@@ -13,17 +13,31 @@ public class SignUpForm {
     private String accountName;
  
     @NotBlank
+    @Size(min = 3, max = 50)
+    private String username;
+    
+    @NotBlank
     @Size(max = 60)
     @Email
     private String email;
     
 	@NotBlank
-    @Size(min = 6, max = 40)
+    @Size(min = 6, max = 100)
     private String password;
 	
     private Set<String> role;
     
-    public String getAccountName() {
+    public SignUpForm(@NotBlank @Size(min = 3, max = 50) String accountName,
+			@NotBlank @Size(min = 3, max = 50) String username, @NotBlank @Size(max = 60) @Email String email,
+			@NotBlank @Size(min = 6, max = 100) String password) {
+		super();
+		this.accountName = accountName;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
+
+	public String getAccountName() {
 		return accountName;
 	}
 
@@ -31,6 +45,14 @@ public class SignUpForm {
 		this.accountName = accountName;
 	}
 
+    public String getUsername() {
+        return username;
+    }
+ 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
 	public String getEmail() {
 		return email;
 	}
