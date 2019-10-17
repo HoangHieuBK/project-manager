@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -35,9 +36,17 @@ public class DepartmentController {
 
 	@GetMapping("/departments")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Department> getAllDepartment() {
+	public List<DepartmentDTO> getAllDepartment() {
 		List<Department> listDepartment = departmentService.findAllDepartment();
-		return listDepartment;
+		
+		List<DepartmentDTO> listDepartmentDTO = new ArrayList<>();
+		
+		listDepartment.forEach(department -> {
+			DepartmentDTO departmentDTO = new DepartmentDTO(department.getDepartmentName(), department.getManagerName(),
+					department.getDiscription());
+			listDepartmentDTO.add(departmentDTO);
+		});
+		return listDepartmentDTO;
 	}
 
 	@GetMapping(value = "/departments/{id}")
@@ -47,7 +56,7 @@ public class DepartmentController {
 		Optional<Department> departmentData = departmentService.findDepartmentById(id);
 		if (departmentData.isPresent()) {
 			Department department = departmentData.get();
-			
+
 			return new ResponseEntity<>(department, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
