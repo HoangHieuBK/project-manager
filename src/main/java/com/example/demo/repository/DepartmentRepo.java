@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.Department;
 @Repository
 public interface DepartmentRepo extends JpaRepository<Department, Integer> {
-	
-//	public Department findDepartmentByName(String nameDepartment);
+
+	Boolean existsByDepartmentName(String departmentName);
 }

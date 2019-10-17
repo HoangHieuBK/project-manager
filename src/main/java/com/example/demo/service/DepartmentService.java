@@ -21,6 +21,8 @@ public interface DepartmentService {
 	
 	boolean getAmoutStaff(int id);
 	
+	boolean existByDepartmentName(String department_name);
+	
 	List<Staff> getListStaffOfDepartment(int id);
 
 }

@@ -27,9 +27,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *
- * @author lthung
  */
 @Entity
 @Table(name = "department")
@@ -55,9 +56,12 @@ public class Department implements Serializable {
     @Basic(optional = false)
     @Column(name = "discription")
     private String discription;
+    
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
     private Collection<Staff> staffCollection;
     
+    @JsonIgnore
     @Transient
     private boolean check= true;
     
@@ -76,8 +80,7 @@ public class Department implements Serializable {
         this.departmentId = departmentId;
     }
 
-    public Department(Integer departmentId, String departmentName, String managerName, String discription) {
-        this.departmentId = departmentId;
+    public Department(String departmentName, String managerName, String discription) {
         this.departmentName = departmentName;
         this.managerName = managerName;
         this.discription = discription;

@@ -80,4 +80,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return true;
 	}
 
+	@Override
+	public boolean existByDepartmentName(String department_name) {
+		// TODO Auto-generated method stub
+		return departmentRepo.existsByDepartmentName(department_name);
+	}
+
 }
