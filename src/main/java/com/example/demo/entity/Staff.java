@@ -42,15 +42,12 @@ import org.springframework.lang.Nullable;
 @NamedQueries({
     @NamedQuery(name = "Staff.findAll", query = "SELECT s FROM Staff s"),
     @NamedQuery(name = "Staff.findByStaffId", query = "SELECT s FROM Staff s WHERE s.staffId = :staffId"),
-    @NamedQuery(name = "Staff.findByFirstName", query = "SELECT s FROM Staff s WHERE s.firstName = :firstName"),
-    @NamedQuery(name = "Staff.findByLastName", query = "SELECT s FROM Staff s WHERE s.lastName = :lastName"),
-    @NamedQuery(name = "Staff.findByFullName", query = "SELECT s FROM Staff s WHERE s.fullName = :fullName"),
+    @NamedQuery(name = "Staff.findByName", query = "SELECT s FROM Staff s WHERE s.name = :name"),
     @NamedQuery(name = "Staff.findByGender", query = "SELECT s FROM Staff s WHERE s.gender = :gender"),
-    @NamedQuery(name = "Staff.findByEmail", query = "SELECT s FROM Staff s WHERE s.email = :email"),
     @NamedQuery(name = "Staff.findByPossition", query = "SELECT s FROM Staff s WHERE s.possition = :possition"),
     @NamedQuery(name = "Staff.findBySkill", query = "SELECT s FROM Staff s WHERE s.skill = :skill"),
     @NamedQuery(name = "Staff.findByTelephone", query = "SELECT s FROM Staff s WHERE s.telephone = :telephone"),
-    @NamedQuery(name = "Staff.findByDiscription", query = "SELECT s FROM Staff s WHERE s.discription = :discription")})
+    @NamedQuery(name = "Staff.findByDescription", query = "SELECT s FROM Staff s WHERE s.description = :description")})
 public class Staff implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,39 +55,40 @@ public class Staff implements Serializable {
     @Basic(optional = false)
     @Column(name = "staff_id")
     private Integer staffId;
+    
     @Basic(optional = false)
-    @Column(name = "first_name")
-    private String firstName;
-    @Basic(optional = false)
-    @Column(name = "last_name")
-    private String lastName;
-    @Basic(optional = false)
-    @Column(name = "full_name")
-    private String fullName;
+    @Column(name = "name")
+    private String name;
+    
     @Column(name = "gender")
     private String gender;
-    @Basic(optional = false)
-    @Column(name = "email")
-    private String email;
+    
     @Column(name = "possition")
     private String possition;
+    
     @Column(name = "skill")
     private String skill;
+    
     @Column(name = "telephone")
     private String telephone;
-    @Column(name = "discription")
-    private String discription;
+    
+    @Column(name = "description")
+    private String description;
+    
     @ManyToMany
     @JoinTable(name = "staff_project",
         joinColumns = @JoinColumn(name = "staff_id"),
         inverseJoinColumns = @JoinColumn(name = "project_id"))
     private Collection<Project> staffProject;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "staffId")
     @Nullable
 	private Collection<Task> task;
+    
     @JoinColumn(name = "department_id", referencedColumnName = "department_id")
     @ManyToOne(optional = false)
     private Department departmentId;
+    
     @JoinColumn(name = "account_id", referencedColumnName = "account_id")
     @ManyToOne(optional = false)
     private Account accountId;
@@ -101,35 +99,17 @@ public class Staff implements Serializable {
 	public void setStaffId(Integer staffId) {
 		this.staffId = staffId;
 	}
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	public String getFullName() {
-		return fullName;
-	}
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getGender() {
 		return gender;
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	public String getPossition() {
 		return possition;
@@ -149,11 +129,11 @@ public class Staff implements Serializable {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-	public String getDiscription() {
-		return discription;
+	public String getDescription() {
+		return description;
 	}
-	public void setDiscription(String discription) {
-		this.discription = discription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public Collection<Project> getStaffProject() {
 		return staffProject;

@@ -42,7 +42,7 @@ public class DepartmentController {
 		List<DepartmentDTO> listDepartmentDTO = new ArrayList<>();
 		
 		listDepartment.forEach(department -> {
-			DepartmentDTO departmentDTO = new DepartmentDTO(department.getDepartmentName(), department.getManagerName(),
+			DepartmentDTO departmentDTO = new DepartmentDTO(department.getDepartmentId(), department.getDepartmentName(), department.getManagerName(),
 					department.getDiscription());
 			listDepartmentDTO.add(departmentDTO);
 		});
@@ -107,7 +107,7 @@ public class DepartmentController {
 	public ResponseEntity<String> delete(@PathVariable("id") int id) {
 		System.out.println("Delete department with ID = " + id + "...");
 		departmentService.deleteDepartment(id);
-		return new ResponseEntity<>("department has been deleted!", HttpStatus.OK);
+		return new ResponseEntity<>("Department has been deleted!", HttpStatus.OK);
 	}
 
 }

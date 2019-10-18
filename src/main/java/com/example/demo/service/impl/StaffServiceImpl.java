@@ -47,7 +47,7 @@ public class StaffServiceImpl implements StaffService {
 			result = listStaff;
 		} else {
 			for (Staff staff : listStaff) {
-				if (staff.getFirstName().toLowerCase().contains(term.toLowerCase())) {
+				if (staff.getName().toLowerCase().contains(term.toLowerCase())) {
 					result.add(staff);
 				}
 			}

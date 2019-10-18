@@ -62,7 +62,7 @@ public class TaskController {
 		modelAndView.addObject("task", task);
 		List<Staff> listStaff = projectService.getListStaffOfProject(task.getProjectId().getProjectId());
 		Map<Integer, String> staffs = new HashMap<>();
-		listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getFullName()));
+		listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getName()));
 		modelAndView.addObject("staffs", staffs);
 		modelAndView.addObject("project", projectService.getProjecByiD(idproject));
 		modelAndView.setViewName("taskform");
@@ -81,7 +81,7 @@ public class TaskController {
 		modelAndView.addObject("task", task);
 		Map<Integer, String> staffs = new HashMap<>();
 		Staff staff = staffService.findOne(idstaff);
-		staffs.put(staff.getStaffId(), staff.getFullName());
+		staffs.put(staff.getStaffId(), staff.getName());
 		modelAndView.addObject("staffs", staffs);
 		modelAndView.setViewName("taskform");
 		return modelAndView;
@@ -103,7 +103,7 @@ public class TaskController {
 		modelAndView.addObject("task", task);
 		List<Staff> listStaff = projectService.getListStaffOfProject(task.getProjectId().getProjectId());
 		Map<Integer, String> staffs = new HashMap<>();
-		listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getFullName()));
+		listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getName()));
 		modelAndView.addObject("staffs", staffs);
 		modelAndView.setViewName("taskform");
 		return modelAndView;
@@ -171,7 +171,7 @@ public class TaskController {
 		modelAndView.addObject("task", task);
 		List<Staff> listStaff = projectService.getListStaffOfProject(task.getProjectId().getProjectId());
 		Map<Integer, String> staffs = new HashMap<>();
-		listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getFullName()));
+		listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getName()));
 		modelAndView.addObject("staffs", staffs);
 		modelAndView.addObject("project", projectService.getProjecByiD(projectId));
 		modelAndView.setViewName("assignTask");

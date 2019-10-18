@@ -13,6 +13,6 @@ import com.example.demo.entity.Task;
 public interface StaffRepo extends JpaRepository<Staff, Integer> {
 //   List<Staff> findByFirstname(String firstname);
 	@Query("select t from Task t where t.staffId.staffId= :staffId")
-	List<Task> fetchStaffP(@Param("staffId") int staffId);
+	List<Task> fetchStaffP(@Param("staffId") int staffId1);
 	
 }

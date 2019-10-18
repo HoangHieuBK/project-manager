@@ -2,6 +2,8 @@ package com.example.demo.dto;
 
 public class DepartmentDTO {
 
+	private int departmentId;
+	
 	private String departmentName;
 	
 	private String managerName;
@@ -12,11 +14,20 @@ public class DepartmentDTO {
 		super();
 	}
 
-	public DepartmentDTO(String departmentName, String managerName, String description) {
+	public DepartmentDTO(int departmentId, String departmentName, String managerName, String description) {
 		super();
+		this.departmentId = departmentId;
 		this.departmentName = departmentName;
 		this.managerName = managerName;
 		this.description = description;
+	}
+
+	public int getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
 	}
 
 	public String getDepartmentName() {
