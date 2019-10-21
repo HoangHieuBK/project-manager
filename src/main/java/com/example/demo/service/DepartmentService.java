@@ -9,7 +9,7 @@ import com.example.demo.entity.Staff;
 public interface DepartmentService {
 	List<Department> findAllDepartment();
 
-	Department findDepartment(String accountName);
+	Optional<Department> findByDepartmentName(String department_name);
 	
 	Optional<Department> findDepartmentById(int id);
 	

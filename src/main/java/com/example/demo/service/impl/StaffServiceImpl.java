@@ -14,17 +14,9 @@ import com.example.demo.service.StaffService;
 public class StaffServiceImpl implements StaffService {
 	@Autowired
 	private StaffRepo staffRepository;
-	//
-	// @Autowired
-	// private RoleRepo roleRepository;
-
-	// @Autowired
-	// private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
 	public Staff save(Staff staff) {
-		// user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		// user.setRoleSet(new HashSet<>(roleRepository.findAll()));
 		return staffRepository.save(staff);
 	}
 
@@ -35,7 +27,6 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override
 	public List<Staff> findAll() {
-		// TODO Auto-generated method stub
 		return staffRepository.findAll();
 	}
 
@@ -57,7 +48,6 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override
 	public Staff findOne(int id) {
-		// TODO Auto-generated method stub
 		Optional<Staff> staff = staffRepository.findById(id);
 		if (staff.isPresent()) {
 			return staff.get();
@@ -72,7 +62,6 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override
 	public String getDerpatmentName(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -80,6 +69,11 @@ public class StaffServiceImpl implements StaffService {
 	public List<Task> getListTask(int staffId) {
 		
 		return staffRepository.fetchStaffP(staffId);
+	}
+
+	@Override
+	public boolean existByStaffName(String staffName) {
+		return staffRepository.existsByName(staffName);
 	}
 
 }

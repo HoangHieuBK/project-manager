@@ -24,16 +24,39 @@ public class StaffDTO {
 
     private Collection<Project> listProject;
     
-    private Department department;
+    private String departmentName;
 
-    private Account account;
+    private String accountName;
+    
+    private String email;
 
 	public StaffDTO() {
 		super();
 	}
 
+	
+
+	public StaffDTO(int staffId, String name, String gender, String possition, String skill, String telephone,
+			String description, Collection<Project> listProject, String departmentName, String accountName,
+			String email) {
+		super();
+		this.staffId = staffId;
+		this.name = name;
+		this.gender = gender;
+		this.possition = possition;
+		this.skill = skill;
+		this.telephone = telephone;
+		this.description = description;
+		this.listProject = listProject;
+		this.departmentName = departmentName;
+		this.accountName = accountName;
+		this.email = email;
+	}
+
+
+
 	public StaffDTO(String name, String gender, String possition, String skill, String telephone, String description,
-			Collection<Project> listProject, Department department, Account account) {
+			Collection<Project> listProject, String departmentName, String accountName, String email) {
 		super();
 		this.name = name;
 		this.gender = gender;
@@ -42,88 +65,119 @@ public class StaffDTO {
 		this.telephone = telephone;
 		this.description = description;
 		this.listProject = listProject;
-		this.department = department;
-		this.account = account;
+		this.departmentName = departmentName;
+		this.accountName = accountName;
+		this.email = email;
 	}
+
 
 	public int getStaffId() {
 		return staffId;
 	}
 
+
 	public void setStaffId(int staffId) {
 		this.staffId = staffId;
 	}
+
 
 	public String getName() {
 		return name;
 	}
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String getGender() {
 		return gender;
 	}
 
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 
 	public String getPossition() {
 		return possition;
 	}
 
+
 	public void setPossition(String possition) {
 		this.possition = possition;
 	}
+
 
 	public String getSkill() {
 		return skill;
 	}
 
+
 	public void setSkill(String skill) {
 		this.skill = skill;
 	}
+
 
 	public String getTelephone() {
 		return telephone;
 	}
 
+
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
+
 
 	public String getDescription() {
 		return description;
 	}
 
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 
 	public Collection<Project> getListProject() {
 		return listProject;
 	}
 
+
 	public void setListProject(Collection<Project> listProject) {
 		this.listProject = listProject;
 	}
 
-	public Department getDepartment() {
-		return department;
+
+	public String getDepartmentName() {
+		return departmentName;
 	}
 
-	public void setDepartment(Department department) {
-		this.department = department;
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 
-	public Account getAccount() {
-		return account;
+
+	public String getAccountName() {
+		return accountName;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 

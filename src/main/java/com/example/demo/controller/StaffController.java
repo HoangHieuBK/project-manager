@@ -1,17 +1,22 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.dto.ResponseMessage;
+import com.example.demo.dto.StaffDTO;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Project;
@@ -29,10 +36,11 @@ import com.example.demo.service.DepartmentService;
 import com.example.demo.service.ProjectService;
 import com.example.demo.service.StaffService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/staffs")
 public class StaffController {
+
 	@Autowired
 	private StaffService staffService;
 
@@ -45,83 +53,95 @@ public class StaffController {
 	@Autowired
 	private ProjectService projectService;
 
-	@GetMapping("/")
-	public List<Staff> listStaff() {
+	@GetMapping("/staffs")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public List<StaffDTO> listStaff() {
 		List<Staff> listStaff = staffService.findAll();
-		return listStaff;
+
+		List<StaffDTO> listStaffDTO = new ArrayList<StaffDTO>();
+
+		listStaff.forEach(staff -> {
+			StaffDTO _staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
+					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
+					staff.getStaffProject(), staff.getDepartmentId().getDepartmentName(),
+					staff.getAccountId().getAccountName(), staff.getAccountId().getEmail());
+			listStaffDTO.add(_staffDTO);
+		});
+		return listStaffDTO;
 	}
 
-	@PostMapping("addStaff")
-	public ResponseEntity<Staff> addStaff(@RequestBody Staff staff) {
-		return new ResponseEntity<>(staffService.save(staff), HttpStatus.OK);
-	}
-
-	@GetMapping("/staff/{id}/edit")
-	public ModelAndView edit(@PathVariable("id") int id) {
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-		
-		modelAndView.addObject("staff", staffService.findOne(id));
-		modelAndView.addObject("departments", departmentService.findAllDepartment());
-		modelAndView.addObject("accounts", accountService.findAllAccount());
-		modelAndView.setViewName("staffform");
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/sta-ff/save", method = RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute("staff") Staff staff,RedirectAttributes redirect) {
-		ModelAndView modelAndView = new ModelAndView();
-		staffService.save(staff);
-		redirect.addFlashAttribute("successMessage", "Saved staff successfully!");
-		modelAndView.setViewName("redirect:/staff");
-		return modelAndView;
-	}
-
-	@GetMapping("/staff/{id}/delete")
-	public String delete(@PathVariable int id,RedirectAttributes redirect) {
-		staffService.delete(id);
-		redirect.addFlashAttribute("successMessage", "Delete staff successfully!");
-		return "redirect:/staff";
-	}
-
-	@GetMapping("/staff/search")
-	public String search(@RequestParam("term") String term) {
-		List<Staff> list = staffService.search(term);
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("staffs", list);
-		return "redirect:/staff";
-	}
-
-	@RequestMapping(value = "/staff/detail/{id}", method = RequestMethod.GET)
-	public ModelAndView detail(@PathVariable int id) {
-		
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-		if(staffService.findOne(id) == null) {
-			modelAndView.setViewName("error/404");
-		}else {
-			modelAndView.addObject("staff", staffService.findOne(id));
-			modelAndView.setViewName("detailstaff");
+	@GetMapping(value = "/staffs/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<?> detail(@PathVariable int id) {
+		Staff staff = staffService.findOne(id);
+		if (staff != null) {
+			return new ResponseEntity<>(staff, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return modelAndView;
 	}
 
-	@GetMapping(value = "project/{id}/staff/{idstaff}/task")
-	public ModelAndView getTask(@PathVariable int id, @PathVariable int idstaff) {
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-		
-		modelAndView.addObject("project", projectService.getProjecByiD(id));
-		modelAndView.addObject("staff", staffService.findOne(idstaff));
-		modelAndView.addObject("tasks", staffService.getListTask(idstaff));
-		modelAndView.setViewName("listtaskofstaff");
-		return modelAndView;
+	@PostMapping("/staffs/add")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public ResponseEntity<?> addStaff(@RequestBody StaffDTO staffDTO) {
+		if (staffService.existByStaffName(staffDTO.getName())) {
+			return new ResponseEntity<>(new ResponseMessage("Fail -> Staff is already taken!"), HttpStatus.BAD_REQUEST);
+		}
+
+		Staff staff = new Staff(staffDTO.getName(), staffDTO.getGender(), staffDTO.getPossition(), staffDTO.getSkill(),
+				staffDTO.getTelephone(), staffDTO.getDescription());
+
+		Department objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName())
+				.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Department not find."));
+		staff.setDepartmentId(objDepart);
+
+		Account objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName())
+				.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account not find."));
+        staff.setAccountId(objAccount);
+        
+        staffService.save(staff);
+		return new ResponseEntity<>(new ResponseMessage("Create Staff Successfully!"), HttpStatus.OK);
+	}
+
+	
+	@PutMapping("/staffs/edit/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public ResponseEntity<?> edit(@PathVariable("id") int id, @RequestBody StaffDTO staffDTO) {
+		System.out.println("Update staff with ID = " + id + "...");
+
+		Staff staffData = staffService.findOne(id);
+
+		if (staffData != null) {
+			staffData.setName(staffDTO.getName());
+			staffData.setGender(staffDTO.getGender());;
+			staffData.setPossition(staffDTO.getPossition());
+			staffData.setSkill(staffDTO.getSkill());
+			staffData.setTelephone(staffDTO.getTelephone());
+			staffData.setDescription(staffDTO.getDescription());
+			
+			Department objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName())
+					.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Department not find."));
+			staffData.setDepartmentId(objDepart);
+
+			Account objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName())
+					.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account not find."));
+			staffData.setAccountId(objAccount);
+			
+	        staffService.save(staffData);
+
+			return new ResponseEntity<>(new ResponseMessage("Edit staff successfully!"), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping("/staff/delete/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	public ResponseEntity<String> delete(@PathVariable int id) {
+		System.out.println("Delete staff with ID = " + id + "...");
+		staffService.delete(id);
+		return new ResponseEntity<>("Staff has been deleted!", HttpStatus.OK);
 
 	}
+
 }

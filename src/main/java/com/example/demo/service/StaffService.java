@@ -21,5 +21,8 @@ public interface StaffService {
 	String getDerpatmentName(int id);
 	
 	List<Task> getListTask(int staffId);
+	
+	boolean existByStaffName(String staffName);
+
 
 }

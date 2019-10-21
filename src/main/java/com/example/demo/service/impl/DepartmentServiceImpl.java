@@ -23,9 +23,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public Department findDepartment(String accountName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Department> findByDepartmentName(String departmentName) {
+		return departmentRepo.findByDepartmentName(departmentName);
 	}
 
 	@Override

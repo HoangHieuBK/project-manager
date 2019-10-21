@@ -93,6 +93,19 @@ public class Staff implements Serializable {
     @ManyToOne(optional = false)
     private Account accountId;
     
+    
+    
+	public Staff(String name, String gender, String possition, String skill, String telephone, String description) {
+		super();
+		this.name = name;
+		this.gender = gender;
+		this.possition = possition;
+		this.skill = skill;
+		this.telephone = telephone;
+		this.description = description;
+	}
+	
+	
 	public Integer getStaffId() {
 		return staffId;
 	}
