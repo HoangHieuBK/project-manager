@@ -33,10 +33,6 @@ import javax.persistence.Table;
 
 import org.springframework.lang.Nullable;
 
-/**
- *
- * @author lthung
- */
 @Entity
 @Table(name = "staff")
 @NamedQueries({
@@ -95,6 +91,11 @@ public class Staff implements Serializable {
     
     
     
+	public Staff() {
+		super();
+	}
+
+
 	public Staff(String name, String gender, String possition, String skill, String telephone, String description) {
 		super();
 		this.name = name;

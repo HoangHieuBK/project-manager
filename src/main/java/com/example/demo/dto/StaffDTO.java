@@ -28,8 +28,6 @@ public class StaffDTO {
 
     private String accountName;
     
-    private String email;
-
 	public StaffDTO() {
 		super();
 	}
@@ -37,8 +35,8 @@ public class StaffDTO {
 	
 
 	public StaffDTO(int staffId, String name, String gender, String possition, String skill, String telephone,
-			String description, Collection<Project> listProject, String departmentName, String accountName,
-			String email) {
+			String description, Collection<Project> listProject, String departmentName, String accountName
+			) {
 		super();
 		this.staffId = staffId;
 		this.name = name;
@@ -50,24 +48,22 @@ public class StaffDTO {
 		this.listProject = listProject;
 		this.departmentName = departmentName;
 		this.accountName = accountName;
-		this.email = email;
 	}
 
 
 
 	public StaffDTO(String name, String gender, String possition, String skill, String telephone, String description,
-			Collection<Project> listProject, String departmentName, String accountName, String email) {
+			Collection<Project> listProject, String departmentName, String accountName) {
 		super();
 		this.name = name;
 		this.gender = gender;
 		this.possition = possition;
 		this.skill = skill;
 		this.telephone = telephone;
-		this.description = description;
+		this.description = description; 
 		this.listProject = listProject;
 		this.departmentName = departmentName;
 		this.accountName = accountName;
-		this.email = email;
 	}
 
 
@@ -168,16 +164,6 @@ public class StaffDTO {
 
 	public void setAccountName(String accountName) {
 		this.accountName = accountName;
-	}
-
-
-	public String getEmail() {
-		return email;
-	}
-
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 

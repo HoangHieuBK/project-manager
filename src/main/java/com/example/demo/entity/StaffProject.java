@@ -36,9 +36,11 @@ public class StaffProject implements Serializable {
 	@Basic(optional = false)
 	@Column(name = "id")
 	private Integer staffProjectId;
+	
 	@Basic(optional = false)
 	@Column(name = "staff_id")
 	private int staffId;
+	
 	@Basic(optional = false)
 	@Column(name = "project_id")
 	private int project_id;

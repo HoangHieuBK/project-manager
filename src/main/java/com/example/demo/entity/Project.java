@@ -51,10 +51,6 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
-/**
- *
- * @author lthung
- */
 @Entity
 @Table(name = "project")
 @NamedQueries({ @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p"),
@@ -64,7 +60,7 @@ import org.springframework.lang.Nullable;
 		@NamedQuery(name = "Project.findByStartDate", query = "SELECT p FROM Project p WHERE p.startDate = :startDate"),
 		@NamedQuery(name = "Project.findByDeadlineDate", query = "SELECT p FROM Project p WHERE p.deadlineDate = :deadlineDate"),
 		@NamedQuery(name = "Project.findByFinishDate", query = "SELECT p FROM Project p WHERE p.finishDate = :finishDate"),
-		@NamedQuery(name = "Project.findByDiscription", query = "SELECT p FROM Project p WHERE p.discription = :discription"),
+		@NamedQuery(name = "Project.findBydescription", query = "SELECT p FROM Project p WHERE p.description = :description"),
 		@NamedQuery(name = "Project.findByProjectState", query = "SELECT p FROM Project p WHERE p.projectState = :projectState"),
 		@NamedQuery(name = "Project.findByProjectOutput", query = "SELECT p FROM Project p WHERE p.projectOutput = :projectOutput") })
 public class Project implements Serializable {
@@ -74,36 +70,46 @@ public class Project implements Serializable {
 	@Basic(optional = false)
 	@Column(name = "project_id")
 	private Integer projectId;
+	
 	@Basic(optional = false)
 	@Column(name = "project_name")
 	private String projectName;
+	
 	@Basic(optional = false)
 	@Column(name = "create_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createDate;
+	
 	@Basic(optional = false)
 	@Column(name = "start_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date startDate;
+	
 	@Basic(optional = false)
 	@Column(name = "deadline_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date deadlineDate;
+	
 	@Column(name = "finish_date")
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@Nullable
 	private Date finishDate;
-	@Column(name = "discription")
-	private String discription;
+	
+	@Column(name = "description")
+	private String description;
+	
 	@Column(name = "project_state")
 	private Integer projectState;
+	
 	@Column(name = "project_output")
 	private String projectOutput;
+	
 	@ManyToMany(mappedBy = "staffProject")
 	private Collection<Staff> staffProject;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
 	private Collection<Task> task;
 
@@ -180,12 +186,12 @@ public class Project implements Serializable {
 		this.finishDate = finishDate;
 	}
 
-	public String getDiscription() {
-		return discription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDiscription(String discription) {
-		this.discription = discription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Integer getProjectState() {

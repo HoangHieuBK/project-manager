@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,23 +10,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.dto.ResponseMessage;
 import com.example.demo.dto.StaffDTO;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Department;
-import com.example.demo.entity.Project;
 import com.example.demo.entity.Staff;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.DepartmentService;
@@ -38,7 +28,6 @@ import com.example.demo.service.StaffService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/staffs")
 public class StaffController {
 
 	@Autowired
@@ -64,7 +53,7 @@ public class StaffController {
 			StaffDTO _staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
 					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
 					staff.getStaffProject(), staff.getDepartmentId().getDepartmentName(),
-					staff.getAccountId().getAccountName(), staff.getAccountId().getEmail());
+					staff.getAccountId().getAccountName());
 			listStaffDTO.add(_staffDTO);
 		});
 		return listStaffDTO;
@@ -75,7 +64,11 @@ public class StaffController {
 	public ResponseEntity<?> detail(@PathVariable int id) {
 		Staff staff = staffService.findOne(id);
 		if (staff != null) {
-			return new ResponseEntity<>(staff, HttpStatus.OK);
+			StaffDTO staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
+					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
+					staff.getStaffProject(), staff.getDepartmentId().getDepartmentName(),
+					staff.getAccountId().getAccountName());
+			return new ResponseEntity<>(staffDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -135,7 +128,7 @@ public class StaffController {
 		}
 	}
 
-	@DeleteMapping("/staff/delete/{id}")
+	@DeleteMapping("/staffs/delete/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<String> delete(@PathVariable int id) {
 		System.out.println("Delete staff with ID = " + id + "...");
