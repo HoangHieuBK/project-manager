@@ -40,4 +40,6 @@ public interface ProjectRepo extends JpaRepository<Project, Integer> {
 
 	@Query(value = "select t from Task t where t.projectId.projectId= :id and t.taskIdparent = null")
 	List<Task> getListBigTaskOfProject(int id);
+	
+	Boolean existsByProjectName(String projectName);
 }

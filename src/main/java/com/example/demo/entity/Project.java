@@ -51,8 +51,11 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "project")
+@JsonIgnoreProperties(value = { "staffProject" })
 @NamedQueries({ @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p"),
 		@NamedQuery(name = "Project.findByProjectId", query = "SELECT p FROM Project p WHERE p.projectId = :projectId"),
 		@NamedQuery(name = "Project.findByProjectName", query = "SELECT p FROM Project p WHERE p.projectName = :projectName"),
@@ -120,14 +123,27 @@ public class Project implements Serializable {
 		this.projectId = projectId;
 	}
 
-	public Project(Integer projectId, String projectName, Date createDate, Date startDate, Date deadlineDate,
+	public Project(String projectName, Date createDate, Date startDate, Date deadlineDate,
 			Date finishDate) {
-		this.projectId = projectId;
 		this.projectName = projectName;
 		this.createDate = createDate;
 		this.startDate = startDate;
 		this.deadlineDate = deadlineDate;
 		this.finishDate = finishDate;
+	}
+
+	
+	public Project(String projectName, Date createDate, Date startDate, Date deadlineDate, Date finishDate,
+			String description, Integer projectState, String projectOutput) {
+		super();
+		this.projectName = projectName;
+		this.createDate = createDate;
+		this.startDate = startDate;
+		this.deadlineDate = deadlineDate;
+		this.finishDate = finishDate;
+		this.description = description;
+		this.projectState = projectState;
+		this.projectOutput = projectOutput;
 	}
 
 	public Collection<Staff> getStaffProject() {

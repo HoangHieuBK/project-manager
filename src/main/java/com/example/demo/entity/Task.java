@@ -40,37 +40,41 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
-/**
- *
- * @author lthung
- */
+
 @Entity
 @Table(name = "task")
 public class Task implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "task_id")
 	private Integer taskId;
+	
 	@Column(name = "task_idparent")
 	private Integer taskIdparent;
 	@Basic(optional = false)
 	@Column(name = "task_name")
 	private String taskName;
+	
 	@Basic(optional = false)
 	@Column(name = "name_create")
 	private String nameCreate;
+	
 	@Basic(optional = false)
 	@Column(name = "date_create")
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateCreate;
+	
 	@Basic(optional = false)
 	@Column(name = "date_start")
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateStart;
+	
 	@Basic(optional = false)
 	@Column(name = "deadline_date")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -87,8 +91,10 @@ public class Task implements Serializable {
 	@Basic(optional = false)
 	@Column(name = "discription")
 	private String discription;
+	
 	@Column(name = "task_output")
 	private String taskOutput;
+	
 	@JoinColumn(name = "project_id", referencedColumnName = "project_id")
 	@ManyToOne(optional = false)
 	private Project projectId;
@@ -96,6 +102,8 @@ public class Task implements Serializable {
 	@JoinColumn(name = "staff_id", referencedColumnName = "staff_id")
 	@ManyToOne()
 	private Staff staffId;
+	
+	
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "task_relation", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "previous_task_id") })

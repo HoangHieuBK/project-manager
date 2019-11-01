@@ -1,16 +1,16 @@
 package com.example.demo.controller;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +21,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dto.ProjectDTO;
+import com.example.demo.dto.ResponseMessage;
 import com.example.demo.entity.Project;
+import com.example.demo.entity.Staff;
 import com.example.demo.service.ProjectService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/projects")
 public class ProjectController {
 
 	@Autowired
@@ -36,39 +38,41 @@ public class ProjectController {
 
 	@GetMapping("/projects")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<ProjectDTO> listProject() {
+	public List<Project> listProject() {
 		List<Project> listProject = projectService.getListProject();
-		List<ProjectDTO> _listProjectDTO = new ArrayList<>();
-		listProject.forEach(project -> {
-			ProjectDTO _projectDTO = new ProjectDTO(project.getProjectName(), project.getCreateDate(), project.getStartDate(), project.getDeadlineDate(), 
-					project.getFinishDate(), project.getDescription(), project.getProjectState(), project.getProjectOutput());
-			
-			Collection<String> _staffsOfProject = new ArrayList<>();
-			project.getStaffProject().forEach(staff -> {
-				_staffsOfProject.add(staff.getName());
-			});
-			_projectDTO.setStaffsOfProject(_staffsOfProject);
-			
-			Collection<String> _task = new ArrayList<>();
-			project.getTask().forEach(task -> {
-				_task.add(task.getTaskName());
-			});
-			_projectDTO.setTask(_task);
-			
-			_listProjectDTO.add(_projectDTO);
-		});
-		return _listProjectDTO;
+		return listProject;
+	}
+
+	@RequestMapping(value = "/projects/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<?> detailProject(@PathVariable int id) {
+		Optional<Project> projectData = projectService.getProjecByiD(id);
+		if (projectData.isPresent()) {
+			return new ResponseEntity<>(projectData.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@PostMapping("/projects/add")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<Project> addProject(@RequestBody Project project) {
-		return new ResponseEntity<>(projectService.saveProject(project), HttpStatus.OK);
+	public ResponseEntity<?> addProject(@RequestBody ProjectDTO projectDTO) {
+		if (projectService.existByProjectName(projectDTO.getProjectName())) {
+			return new ResponseEntity<>(new ResponseMessage("Fail -> Project is already existed!"),
+					HttpStatus.BAD_REQUEST);
+		}
+
+		Project project = new Project(projectDTO.getProjectName(), projectDTO.getCreateDate(),
+				projectDTO.getStartDate(), projectDTO.getDeadlineDate(), projectDTO.getFinishDate(),
+				projectDTO.getDescription(), projectDTO.getProjectState(), projectDTO.getProjectOutput());
+
+		projectService.saveProject(project);
+		return new ResponseEntity<>(new ResponseMessage("Create Project Successfully!"), HttpStatus.OK);
 	}
 
 	@PutMapping("/projects/edit/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<Project> editProject(@PathVariable("id") int id, @RequestBody Project project) {
+	public ResponseEntity<?> editProject(@PathVariable("id") int id, @RequestBody ProjectDTO projectDTO) {
 
 		System.out.println("Update project with ID = " + id + "...");
 
@@ -76,15 +80,18 @@ public class ProjectController {
 
 		if (projectData.isPresent()) {
 			Project _project = projectData.get();
-			_project.setProjectName(project.getProjectName());
-			_project.setCreateDate(project.getCreateDate());
-			_project.setStartDate(project.getStartDate());
-			_project.setDeadlineDate(project.getDeadlineDate());
-			_project.setFinishDate(project.getFinishDate()); 
-			_project.setDescription(project.getDescription());
-			_project.setProjectState(project.getProjectState());
-			_project.setProjectOutput(project.getProjectOutput());
-			return new ResponseEntity<>(projectService.saveProject(_project), HttpStatus.OK);
+			_project.setProjectName(projectDTO.getProjectName());
+			_project.setCreateDate(projectDTO.getCreateDate());
+			_project.setStartDate(projectDTO.getStartDate());
+			_project.setDeadlineDate(projectDTO.getDeadlineDate());
+			_project.setFinishDate(projectDTO.getFinishDate());
+			_project.setDescription(projectDTO.getDescription());
+			_project.setProjectState(projectDTO.getProjectState());
+			_project.setProjectOutput(projectDTO.getProjectOutput());
+
+			projectService.saveProject(_project);
+
+			return new ResponseEntity<>(new ResponseMessage("Edit project successfully!"), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -92,36 +99,39 @@ public class ProjectController {
 
 	@DeleteMapping("/projects/delete/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<Project> deleteProject(@PathVariable int id) {
+	public ResponseEntity<?> deleteProject(@PathVariable int id) {
 		System.out.println("Delete project with ID = " + id + "...");
 		projectService.deleteProjectById(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>("Project has been deleted!", HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/projects/detail/{id}", method = RequestMethod.GET)
+	
+	@GetMapping(value = "/projects/{id}/staffs")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public Project detailProject(@PathVariable int id) {
-		Optional<Project> projectData = projectService.getProjecByiD(id);
-		if (projectData.isPresent()) {
-			return projectData.get();
-		}
-		return null;
+	public List<Staff> getstaffInProject(@PathVariable int id) {
+		List<Staff> listStaffOfProject = projectService.getListStaffOfProject(id);
+		return listStaffOfProject;
 	}
-
+	
+	@GetMapping(value = "/projects/{id}/staffsNotIn")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public List<Staff> getstaffNotInProject(@PathVariable int id) {
+		List<Staff> listStaffNotInProject = projectService.getListStaffNotInProject(id);
+		return listStaffNotInProject;
+	}
+	
 	@PostMapping("/projects/{id}/staff/add/{idStaff}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<Project> addStaffInproject(@PathVariable int id, @PathVariable int idStaff) {
-
+	public ResponseEntity<?> addStaffInproject(@PathVariable int id, @PathVariable int idStaff) {
 		projectService.addStaffInProject(id, idStaff);
-
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>("Staff has been added into project!", HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/projects/{id}/staff/{idStaff}/delete")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<Project> deleteStaffInProject(@PathVariable int id, @PathVariable int idStaff) {
+	public ResponseEntity<?> deleteStaffInProject(@PathVariable int id, @PathVariable int idStaff) {
 		projectService.deleteStaffIdInProject(idStaff, id);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>("Staff has been deleted from project!", HttpStatus.OK);
 	}
 
 }

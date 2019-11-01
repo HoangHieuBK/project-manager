@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  *
- * @author lthung
+ *
  */
 @Entity
 @Table(name = "roles")

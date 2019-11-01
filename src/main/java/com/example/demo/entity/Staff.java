@@ -33,8 +33,11 @@ import javax.persistence.Table;
 
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "staff")
+@JsonIgnoreProperties(value = { "staffProject" })
 @NamedQueries({
     @NamedQuery(name = "Staff.findAll", query = "SELECT s FROM Staff s"),
     @NamedQuery(name = "Staff.findByStaffId", query = "SELECT s FROM Staff s WHERE s.staffId = :staffId"),

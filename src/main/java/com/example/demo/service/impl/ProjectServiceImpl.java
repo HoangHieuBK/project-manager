@@ -97,4 +97,9 @@ public class ProjectServiceImpl implements ProjectService{
 		return projectRepo.getOne(id);
 	}
 
+	@Override
+	public Boolean existByProjectName(String name) {
+		return projectRepo.existsByProjectName(name);
+	}
+
 }

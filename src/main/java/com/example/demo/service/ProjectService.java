@@ -33,5 +33,6 @@ public interface ProjectService {
 	List<Task> getListBigTaskOfProject(int id);
 
 	Project findByProjectId(int id);
-
+ 
+	Boolean existByProjectName(String name);
 }
