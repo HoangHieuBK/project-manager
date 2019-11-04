@@ -55,6 +55,7 @@ public class Task implements Serializable {
 	
 	@Column(name = "task_idparent")
 	private Integer taskIdparent;
+	
 	@Basic(optional = false)
 	@Column(name = "task_name")
 	private String taskName;
@@ -88,6 +89,7 @@ public class Task implements Serializable {
 
 	@Column(name = "task_state")
 	private Integer taskState;
+	
 	@Basic(optional = false)
 	@Column(name = "discription")
 	private String discription;
@@ -124,6 +126,22 @@ public class Task implements Serializable {
 		this.dateCreate = dateCreate;
 		this.deadlineDate = deadlineDate;
 		this.discription = discription;
+	}
+
+	
+	
+	public Task(String taskName, String nameCreate, Date dateCreate, Date dateStart, Date deadlineDate, Date finishDate,
+			Integer taskState, String discription, String taskOutput) {
+		super();
+		this.taskName = taskName;
+		this.nameCreate = nameCreate;
+		this.dateCreate = dateCreate;
+		this.dateStart = dateStart;
+		this.deadlineDate = deadlineDate;
+		this.finishDate = finishDate;
+		this.taskState = taskState;
+		this.discription = discription;
+		this.taskOutput = taskOutput;
 	}
 
 	public Date getDateStart() {
