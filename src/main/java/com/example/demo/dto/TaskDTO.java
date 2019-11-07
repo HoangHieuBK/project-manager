@@ -1,9 +1,12 @@
 package com.example.demo.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.example.demo.entity.Project;
 import com.example.demo.entity.Staff;
+import com.example.demo.entity.Task;
 
 public class TaskDTO {
 
@@ -19,6 +22,7 @@ public class TaskDTO {
 	private String taskOutput;
 	private Project project;
 	private Staff staff;
+	private Set<Task> previousTask = new HashSet<>();
 
 	public TaskDTO() {
 		super();
@@ -132,6 +136,14 @@ public class TaskDTO {
 
 	public void setStaff(Staff staff) {
 		this.staff = staff;
+	}
+
+	public Set<Task> getPreviousTask() {
+		return previousTask;
+	}
+
+	public void setPreviousTask(Set<Task> previousTask) {
+		this.previousTask = previousTask;
 	}
 	
 	

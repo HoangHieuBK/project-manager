@@ -19,81 +19,88 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "progress_task")
-public class TaskProgress implements Serializable{
-  private static final long serialVersionUID = 1L;
+public class TaskProgress implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Basic(optional = false)
-  @Column(name = "progressId")
-  private Long progressId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Basic(optional = false)
+	@Column(name = "progressId")
+	private Long progressId;
 
-  @Basic(optional = false)
-  @Column(name = "datelog")
-  @Temporal(TemporalType.TIMESTAMP)
-  @DateTimeFormat(pattern="yyyy-MM-dd")
-  private Date dateLog;
+	@Basic(optional = false)
+	@Column(name = "datelog")
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date dateLog;
 
-  @Column(name = "progress")
-  private int progress;
+	@Column(name = "progress")
+	private int progress;
 
-  @Column(name = "detail_log")
-  private String detailLog;
+	@Column(name = "detail_log")
+	private String detailLog;
 
-  @JoinColumn(name = "task_id", referencedColumnName = "task_id")
-  @ManyToOne(optional = false)
-  private Task taskId;
+	@JoinColumn(name = "task_id", referencedColumnName = "task_id")
+	@ManyToOne(optional = false)
+	private Task taskId;
 
-  public TaskProgress() {
-    super();
-  }
+	public TaskProgress() {
+		super();
+	}
 
-  public TaskProgress(Long progressId, Date dateLog, int progress, String detailLog, Task taskId) {
-    super();
-    this.progressId = progressId;
-    this.dateLog = dateLog;
-    this.progress = progress;
-    this.detailLog = detailLog;
-    this.taskId = taskId;
-  }
+	public TaskProgress(Date dateLog, int progress, String detailLog) {
+		super();
+		this.dateLog = dateLog;
+		this.progress = progress;
+		this.detailLog = detailLog;
+	}
 
-  public Long getProgressId() {
-    return progressId;
-  }
+	public TaskProgress(Long progressId, Date dateLog, int progress, String detailLog, Task taskId) {
+		super();
+		this.progressId = progressId;
+		this.dateLog = dateLog;
+		this.progress = progress;
+		this.detailLog = detailLog;
+		this.taskId = taskId;
+	}
 
-  public void setProgressId(Long progressId) {
-    this.progressId = progressId;
-  }
+	public Long getProgressId() {
+		return progressId;
+	}
 
-  public Date getDateLog() {
-    return dateLog;
-  }
+	public void setProgressId(Long progressId) {
+		this.progressId = progressId;
+	}
 
-  public void setDateLog(Date dateLog) {
-    this.dateLog = dateLog;
-  }
+	public Date getDateLog() {
+		return dateLog;
+	}
 
-  public int getProgress() {
-    return progress;
-  }
+	public void setDateLog(Date dateLog) {
+		this.dateLog = dateLog;
+	}
 
-  public void setProgress(int progress) {
-    this.progress = progress;
-  }
+	public int getProgress() {
+		return progress;
+	}
 
-  public String getDetailLog() {
-    return detailLog;
-  }
+	public void setProgress(int progress) {
+		this.progress = progress;
+	}
 
-  public void setDetailLog(String detailLog) {
-    this.detailLog = detailLog;
-  }
+	public String getDetailLog() {
+		return detailLog;
+	}
 
-  public Task getTaskId() {
-    return taskId;
-  }
+	public void setDetailLog(String detailLog) {
+		this.detailLog = detailLog;
+	}
 
-  public void setTaskId(Task taskId) {
-    this.taskId = taskId;
-  }
+	public Task getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(Task taskId) {
+		this.taskId = taskId;
+	}
 }

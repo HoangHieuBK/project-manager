@@ -56,6 +56,14 @@ public class Events {
 		this.staffId = staffId;
 	}
 
+	public Events(String title, String description, Date start, Date end) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.start = start;
+		this.end = end;
+	}
+
 	public Events() {
 		super();
 	}

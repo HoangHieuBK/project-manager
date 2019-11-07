@@ -51,38 +51,6 @@ public class TaskController {
 	@Autowired
 	TaskProgressService taskProgressService;
 
-	@RequestMapping(value = "/project/{id}/task/save", method = RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute("task") Task task, @PathVariable("id") int id,
-			RedirectAttributes redirect) {
-		ModelAndView modelAndView = new ModelAndView();
-//		String nameAssign = staffService.findOne(task.getStaffId().getStaffId()).getFullName();
-//		task.setNameAssign(nameAssign);
-		taskService.saveTask(task);
-		modelAndView.addObject("project", projectService.getProjecByiD(id));
-		modelAndView.setViewName("redirect:/project/{id}/task");
-		redirect.addFlashAttribute("notification", "bạn thực hiện action thành công !");
-		return modelAndView;
-	}
-
-	// edit task
-	@GetMapping(value = "project/{idproject}/task/{id}/edit")
-	public ModelAndView edit(@PathVariable("idproject") int idproject, @PathVariable("id") int id) {
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-
-		Task task = taskService.findById(id);
-		modelAndView.addObject("task", task);
-		List<Staff> listStaff = projectService.getListStaffOfProject(task.getProjectId().getProjectId());
-		Map<Integer, String> staffs = new HashMap<>();
-		listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getName()));
-		modelAndView.addObject("staffs", staffs);
-		modelAndView.addObject("project", projectService.getProjecByiD(idproject));
-		modelAndView.setViewName("taskform");
-		return modelAndView;
-	}
-
 	@PostMapping(value = "project/{id}/staff/{idstaff}/tasks/add")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addTaskToStaff(@PathVariable("id") int id, @PathVariable("idstaff") int idstaff,
@@ -122,16 +90,15 @@ public class TaskController {
 		return new ResponseEntity<>(new ResponseMessage("Create SubTask Successfully!"), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/task/detail/{id}")
-	public ModelAndView getTask(@PathVariable("id") int id) {
-		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String name = auth.getName(); // get logged in username
-//		modelAndView.addObject("username", name);
-
-		modelAndView.addObject("task", taskService.findById(id));
-		modelAndView.setViewName("detailtask");
-		return modelAndView;
+	@GetMapping(value = "/tasks/{id}")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<?> detailTask(@PathVariable("id") int id) {
+		Task task = taskService.findById(id);
+		if (task != null) {
+			return new ResponseEntity<>(task, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@DeleteMapping(value = "project/{id}/task/delete/{idtask}")
@@ -152,41 +119,4 @@ public class TaskController {
 		return new ResponseEntity<>(new ResponseMessage("Delete Task Successfully!"), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "task/{id}/worklog")
-	public ModelAndView createWorkLog(@PathVariable("id") int id) {
-		ModelAndView mav = new ModelAndView();
-		TaskProgress taskProgress = new TaskProgress();
-		Task task = taskService.findById(id);
-		Set<Task> previousTasks = task.getPreviousTask();
-		for (Task previousTask : previousTasks) {
-			if (previousTask.getTaskState() < 100) {
-				mav.setViewName("/error/403");
-				return mav;
-			}
-		}
-		taskProgress.setTaskId(task);
-		taskProgress.setDateLog(new Date());
-		mav.addObject("taskprogress", taskProgress);
-		mav.addObject(task);
-		mav.setViewName("progresstaskform");
-		return mav;
-	}
-
-	// assign task
-	@GetMapping(value = "project/{projectId}/task/{taskId}/assign")
-	public ModelAndView assignTask(@PathVariable("projectId") int projectId, @PathVariable("taskId") int taskId,
-			RedirectAttributes redirect) {
-		ModelAndView modelAndView = new ModelAndView();
-
-		Task task = taskService.findById(taskId);
-		modelAndView.addObject("task", task);
-		List<Staff> listStaff = projectService.getListStaffOfProject(task.getProjectId().getProjectId());
-		Map<Integer, String> staffs = new HashMap<>();
-		listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getName()));
-		modelAndView.addObject("staffs", staffs);
-		modelAndView.addObject("project", projectService.getProjecByiD(projectId));
-		modelAndView.setViewName("assignTask");
-		redirect.addFlashAttribute("message", "bạn thực hiện assign task thành công !");
-		return modelAndView;
-	}
 }
