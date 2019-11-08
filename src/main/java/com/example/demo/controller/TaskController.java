@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,8 +57,7 @@ public class TaskController {
 	public ResponseEntity<?> addTaskToStaff(@PathVariable("id") int id, @PathVariable("idstaff") int idstaff,
 			@RequestBody TaskDTO taskDTO) {
 		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
-				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getFinishDate(), taskDTO.getTaskState(),
-				taskDTO.getDiscription(), taskDTO.getTaskOutput());
+				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());
 
 		Project project = projectService.getProjecByiD(id).get();
 		if (project != null) {
@@ -68,6 +68,9 @@ public class TaskController {
 			task.setStaffId(staff);
 			;
 		}
+		List<Task> _listBigTaskOfProject = projectService.getListBigTaskOfProject(id);
+		Set<Task> listPreviousTaskOfProject = new HashSet<Task>(_listBigTaskOfProject);
+		task.setPreviousTask(listPreviousTaskOfProject);
 
 		taskService.saveTask(task);
 		return new ResponseEntity<>(new ResponseMessage("Create Task Successfully!"), HttpStatus.OK);
@@ -79,8 +82,7 @@ public class TaskController {
 
 		Task parentTask = taskService.findById(id);
 		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
-				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getFinishDate(), taskDTO.getTaskState(),
-				taskDTO.getDiscription(), taskDTO.getTaskOutput());
+				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());
 		if (parentTask != null) {
 			task.setProjectId(parentTask.getProjectId());
 			task.setTaskIdparent(parentTask.getTaskId());
@@ -119,4 +121,17 @@ public class TaskController {
 		return new ResponseEntity<>(new ResponseMessage("Delete Task Successfully!"), HttpStatus.OK);
 	}
 
+	@PostMapping(value = "staff/{idstaff}/tasks/{taskId}/assign")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<?> assignStaffForTask(@PathVariable("idstaff") int idstaff,
+			@PathVariable("taskId") int taskId) {
+		Task task = taskService.findById(taskId);
+		Staff staff = staffService.findOne(idstaff);
+		if (staff != null) {
+			task.setStaffId(staff);
+			;
+		}
+		taskService.saveTask(task);
+		return new ResponseEntity<>(new ResponseMessage("Assign Staff For Task Successfully!"), HttpStatus.OK);
+	}
 }

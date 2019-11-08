@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +26,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dto.ProjectDTO;
 import com.example.demo.dto.ResponseMessage;
+import com.example.demo.dto.TaskDTO;
 import com.example.demo.entity.Project;
 import com.example.demo.entity.Staff;
+import com.example.demo.entity.Task;
 import com.example.demo.service.ProjectService;
+import com.example.demo.service.TaskService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -36,6 +40,9 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 
+	@Autowired
+	TaskService taskService;
+	
 	@GetMapping("/projects")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<Project> listProject() {
@@ -111,6 +118,40 @@ public class ProjectController {
 	public List<Staff> getstaffInProject(@PathVariable int id) {
 		List<Staff> listStaffOfProject = projectService.getListStaffOfProject(id);
 		return listStaffOfProject;
+	}
+	
+	@GetMapping(value = "/projects/{id}/tasks")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public List<Task> getTasksInProject(@PathVariable int id) {
+		List<Task> listTaskOfProject = projectService.getListTaskOfProject(id);
+		return listTaskOfProject;
+	}
+	
+	@GetMapping(value = "/projects/{id}/previousTasks")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public List<Task> getPreviousTaskInProject(@PathVariable int id) {
+		List<Task> listPreviousTaskOfProject = projectService.getListBigTaskOfProject(id);
+		return listPreviousTaskOfProject;
+	}
+	
+	
+	@PostMapping(value = "projects/{id}/addTask")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<?> addTaskToProject(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
+		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
+				taskDTO.getDateStart(), taskDTO.getDeadlineDate(),
+				taskDTO.getDiscription(), taskDTO.getTaskOutput());
+
+		Project project = projectService.getProjecByiD(id).get();
+		if (project != null) {
+			task.setProjectId(project);
+		}
+   
+		Set<Task> listPreviousTaskOfProject = (Set<Task>) projectService.getListBigTaskOfProject(id);
+        task.setPreviousTask(listPreviousTaskOfProject);
+        
+		taskService.saveTask(task);
+		return new ResponseEntity<>(new ResponseMessage("Create Task Successfully!"), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/projects/{id}/staffsNotIn")

@@ -41,8 +41,11 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "task")
+@JsonIgnoreProperties({ "projectId", "staffId", "previousTask"})
 public class Task implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -130,16 +133,15 @@ public class Task implements Serializable {
 
 	
 	
-	public Task(String taskName, String nameCreate, Date dateCreate, Date dateStart, Date deadlineDate, Date finishDate,
-			Integer taskState, String discription, String taskOutput) {
+	public Task(String taskName, String nameCreate, Date dateCreate, Date dateStart, Date deadlineDate,
+			 String discription, String taskOutput) {
 		super();
 		this.taskName = taskName;
 		this.nameCreate = nameCreate;
 		this.dateCreate = dateCreate;
 		this.dateStart = dateStart;
 		this.deadlineDate = deadlineDate;
-		this.finishDate = finishDate;
-		this.taskState = taskState;
+		this.taskState = 0;
 		this.discription = discription;
 		this.taskOutput = taskOutput;
 	}

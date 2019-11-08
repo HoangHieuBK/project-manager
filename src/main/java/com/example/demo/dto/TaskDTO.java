@@ -29,14 +29,13 @@ public class TaskDTO {
 	}
 
 	public TaskDTO(String taskName, String nameCreate, Date dateCreate, Date dateStart, Date deadlineDate,
-			Date finishDate, Integer taskState, String discription, String taskOutput) {
+		 Integer taskState, String discription, String taskOutput) {
 		super();
 		this.taskName = taskName;
 		this.nameCreate = nameCreate;
 		this.dateCreate = dateCreate;
 		this.dateStart = dateStart;
 		this.deadlineDate = deadlineDate;
-		this.finishDate = finishDate;
 		this.taskState = taskState;
 		this.discription = discription;
 		this.taskOutput = taskOutput;
