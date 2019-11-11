@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -146,8 +147,10 @@ public class ProjectController {
 		if (project != null) {
 			task.setProjectId(project);
 		}
-   
-		Set<Task> listPreviousTaskOfProject = (Set<Task>) projectService.getListBigTaskOfProject(id);
+		
+		List<Task> listBigTaskOfProject = projectService.getListBigTaskOfProject(id);
+
+		Set<Task> listPreviousTaskOfProject =  new HashSet<Task>(listBigTaskOfProject);
         task.setPreviousTask(listPreviousTaskOfProject);
         
 		taskService.saveTask(task);

@@ -121,7 +121,7 @@ public class TaskController {
 		return new ResponseEntity<>(new ResponseMessage("Delete Task Successfully!"), HttpStatus.OK);
 	}
 
-	@PostMapping(value = "staff/{idstaff}/tasks/{taskId}/assign")
+	@PostMapping(value = "staffs/{idstaff}/tasks/{taskId}/assign")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> assignStaffForTask(@PathVariable("idstaff") int idstaff,
 			@PathVariable("taskId") int taskId) {

@@ -41,44 +41,45 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "task")
-@JsonIgnoreProperties({ "projectId", "staffId", "previousTask"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Task implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	@Column(name = "task_id")
 	private Integer taskId;
-	
+
 	@Column(name = "task_idparent")
 	private Integer taskIdparent;
-	
+
 	@Basic(optional = false)
 	@Column(name = "task_name")
 	private String taskName;
-	
+
 	@Basic(optional = false)
 	@Column(name = "name_create")
 	private String nameCreate;
-	
+
 	@Basic(optional = false)
 	@Column(name = "date_create")
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateCreate;
-	
+
 	@Basic(optional = false)
 	@Column(name = "date_start")
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateStart;
-	
+
 	@Basic(optional = false)
 	@Column(name = "deadline_date")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -92,23 +93,25 @@ public class Task implements Serializable {
 
 	@Column(name = "task_state")
 	private Integer taskState;
-	
+
 	@Basic(optional = false)
 	@Column(name = "discription")
 	private String discription;
-	
+
 	@Column(name = "task_output")
 	private String taskOutput;
 	
+	@JsonIgnore 
 	@JoinColumn(name = "project_id", referencedColumnName = "project_id")
 	@ManyToOne(optional = false)
 	private Project projectId;
 
+	@JsonIgnore 
 	@JoinColumn(name = "staff_id", referencedColumnName = "staff_id")
 	@ManyToOne()
 	private Staff staffId;
 	
-	
+	@JsonIgnore 
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "task_relation", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "previous_task_id") })
@@ -121,8 +124,8 @@ public class Task implements Serializable {
 		this.taskId = taskId;
 	}
 
-	public Task(Integer taskId, String taskName, String nameCreate, Date dateCreate,
-			Date deadlineDate, String discription) {
+	public Task(Integer taskId, String taskName, String nameCreate, Date dateCreate, Date deadlineDate,
+			String discription) {
 		this.taskId = taskId;
 		this.taskName = taskName;
 		this.nameCreate = nameCreate;
@@ -131,10 +134,8 @@ public class Task implements Serializable {
 		this.discription = discription;
 	}
 
-	
-	
 	public Task(String taskName, String nameCreate, Date dateCreate, Date dateStart, Date deadlineDate,
-			 String discription, String taskOutput) {
+			String discription, String taskOutput) {
 		super();
 		this.taskName = taskName;
 		this.nameCreate = nameCreate;

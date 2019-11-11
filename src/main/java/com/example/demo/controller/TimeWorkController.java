@@ -37,7 +37,7 @@ public class TimeWorkController {
 	@Autowired
 	private StaffService staffService;
 
-	@GetMapping(value = "staff/{id}/timeworks")
+	@GetMapping(value = "staffs/{id}/timeworks")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<Events> getInfoTime(@PathVariable("id") int id) {
 		List<Events> listEvents = new ArrayList<Events>();
@@ -49,7 +49,7 @@ public class TimeWorkController {
 		return listEvents;
 	}
 
-	@PostMapping(value = "staff/{id}/timeworks/add")
+	@PostMapping(value = "staffs/{id}/addTimeworks")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addEvent(@RequestBody EventDTO eventDTO, @PathVariable("id") int id) {
 		Events event = new Events(eventDTO.getTitle(), eventDTO.getDescription(), eventDTO.getStart(), eventDTO.getEnd());
