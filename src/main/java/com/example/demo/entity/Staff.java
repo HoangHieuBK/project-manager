@@ -33,6 +33,7 @@ import javax.persistence.Table;
 
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -74,6 +75,7 @@ public class Staff implements Serializable {
     @Column(name = "description")
     private String description;
     
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "staff_project",
         joinColumns = @JoinColumn(name = "staff_id"),

@@ -56,8 +56,7 @@ public class StaffController {
 		listStaff.forEach(staff -> {
 			StaffDTO _staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
 					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
-					staff.getStaffProject(), staff.getDepartmentId().getDepartmentName(),
-					staff.getAccountId().getAccountName());
+					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
 			listStaffDTO.add(_staffDTO);
 		});
 		return listStaffDTO;
@@ -70,8 +69,7 @@ public class StaffController {
 		if (staff != null) {
 			StaffDTO staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
 					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
-					staff.getStaffProject(), staff.getDepartmentId().getDepartmentName(),
-					staff.getAccountId().getAccountName());
+					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
 			return new ResponseEntity<>(staffDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -94,13 +92,12 @@ public class StaffController {
 
 		Account objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName())
 				.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account not find."));
-        staff.setAccountId(objAccount);
-        
-        staffService.save(staff);
+		staff.setAccountId(objAccount);
+
+		staffService.save(staff);
 		return new ResponseEntity<>(new ResponseMessage("Create Staff Successfully!"), HttpStatus.OK);
 	}
 
-	
 	@PutMapping("/staffs/edit/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> edit(@PathVariable("id") int id, @RequestBody StaffDTO staffDTO) {
@@ -110,12 +107,13 @@ public class StaffController {
 
 		if (staffData != null) {
 			staffData.setName(staffDTO.getName());
-			staffData.setGender(staffDTO.getGender());;
+			staffData.setGender(staffDTO.getGender());
+			;
 			staffData.setPossition(staffDTO.getPossition());
 			staffData.setSkill(staffDTO.getSkill());
 			staffData.setTelephone(staffDTO.getTelephone());
 			staffData.setDescription(staffDTO.getDescription());
-			
+
 			Department objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName())
 					.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Department not find."));
 			staffData.setDepartmentId(objDepart);
@@ -123,8 +121,8 @@ public class StaffController {
 			Account objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName())
 					.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account not find."));
 			staffData.setAccountId(objAccount);
-			
-	        staffService.save(staffData);
+
+			staffService.save(staffData);
 
 			return new ResponseEntity<>(new ResponseMessage("Edit staff successfully!"), HttpStatus.OK);
 		} else {
@@ -140,7 +138,7 @@ public class StaffController {
 		return new ResponseEntity<>("Staff has been deleted!", HttpStatus.OK);
 
 	}
-	
+
 	@GetMapping(value = "/staffs/{idstaff}/tasks")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<Task> getTaskOfStaff(@PathVariable int idstaff) {

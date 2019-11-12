@@ -22,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Optional<Account> findAccountByAccountName(String accountName) {
-		return accountRepo.findAccountByUsername(accountName);
+		return accountRepo.findAccountByAccountName(accountName);
 	}
 
 	@Override

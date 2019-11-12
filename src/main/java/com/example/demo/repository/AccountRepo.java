@@ -14,6 +14,8 @@ import com.example.demo.entity.Role;
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Integer>{
 	Optional<Account> findAccountByUsername(String username);
+	Optional<Account> findAccountByAccountName(String accountName);
+
 	Boolean existsByUsername(String username);
 	Boolean existsByEmail(String email);
 	
