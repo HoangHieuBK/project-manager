@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import com.example.demo.dto.ResponseMessage;
 import com.example.demo.dto.StaffDTO;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Department;
+import com.example.demo.entity.Role;
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Task;
 import com.example.demo.service.AccountService;
@@ -70,6 +73,28 @@ public class StaffController {
 			StaffDTO staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
 					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
 					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
+			        staffDTO.setEmail(staff.getAccountId().getEmail());
+			        staffDTO.setManagerName(staff.getDepartmentId().getManagerName());
+			        
+					Set<Role> roles = staff.getAccountId().getRoles();
+					Set<String> strRoles = new HashSet<String>();
+					roles.forEach(role -> {
+						switch (role.getRoleName()) {
+						case ROLE_ADMIN:
+							strRoles.add("ROLE_ADMIN");
+							break;
+						case ROLE_PM: 
+							strRoles.add("ROLE_PM");
+							break;
+						case ROLE_USER:
+							strRoles.add("ROLE_USER");
+							break;
+						default:
+							break;
+						}
+					});
+					
+					staffDTO.setRole(strRoles);
 			return new ResponseEntity<>(staffDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

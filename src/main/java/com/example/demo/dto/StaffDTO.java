@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import java.util.Collection;
+import java.util.Set;
 
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Department;
@@ -25,6 +26,12 @@ public class StaffDTO {
 	private String departmentName;
 
 	private String accountName;
+
+	private String email;
+
+	private String managerName ;
+
+    private Set<String> role;
 
 	public StaffDTO() {
 		super();
@@ -129,4 +136,30 @@ public class StaffDTO {
 		this.accountName = accountName;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getManagerName() {
+		return managerName;
+	}
+
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
+
+	public Set<String> getRole() {
+		return role;
+	}
+
+	public void setRole(Set<String> role) {
+		this.role = role;
+	}
+
+
+	
 }
