@@ -19,14 +19,16 @@ public class ProjectDTO {
 	private String projectOutput;
 	private Collection<String> staffsOfProject;
 	private Collection<String> task;
-	
+	private Integer numberOfStaff;
+	private Integer numberOfTask;
 	public ProjectDTO() {
 		super();
 	}
 
-	public ProjectDTO(String projectName, Date createDate, Date startDate, Date deadlineDate, Date finishDate,
+	public ProjectDTO(Integer projectId, String projectName, Date createDate, Date startDate, Date deadlineDate, Date finishDate,
 			String description, Integer projectState, String projectOutput) {
 		super();
+		this.projectId = projectId;
 		this.projectName = projectName;
 		this.createDate = createDate;
 		this.startDate = startDate;
@@ -132,6 +134,22 @@ public class ProjectDTO {
 
 	public void setTask(Collection<String> task) {
 		this.task = task;
+	}
+
+	public Integer getNumberOfStaff() {
+		return numberOfStaff;
+	}
+
+	public void setNumberOfStaff(Integer numberOfStaff) {
+		this.numberOfStaff = numberOfStaff;
+	}
+
+	public Integer getNumberOfTask() {
+		return numberOfTask;
+	}
+
+	public void setNumberOfTask(Integer numberOfTask) {
+		this.numberOfTask = numberOfTask;
 	}
 
 	

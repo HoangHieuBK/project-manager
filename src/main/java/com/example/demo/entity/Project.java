@@ -73,46 +73,46 @@ public class Project implements Serializable {
 	@Basic(optional = false)
 	@Column(name = "project_id")
 	private Integer projectId;
-	
+
 	@Basic(optional = false)
 	@Column(name = "project_name")
 	private String projectName;
-	
+
 	@Basic(optional = false)
 	@Column(name = "create_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createDate;
-	
+
 	@Basic(optional = false)
 	@Column(name = "start_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date startDate;
-	
+
 	@Basic(optional = false)
 	@Column(name = "deadline_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date deadlineDate;
-	
+
 	@Column(name = "finish_date")
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Nullable
 	private Date finishDate;
-	
+
 	@Column(name = "description")
 	private String description;
-	
+
 	@Column(name = "project_state")
 	private Integer projectState;
-	
+
 	@Column(name = "project_output")
 	private String projectOutput;
-	
+
 	@ManyToMany(mappedBy = "staffProject")
 	private Collection<Staff> staffProject;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
 	private Collection<Task> task;
 
@@ -123,8 +123,7 @@ public class Project implements Serializable {
 		this.projectId = projectId;
 	}
 
-	public Project(String projectName, Date createDate, Date startDate, Date deadlineDate,
-			Date finishDate) {
+	public Project(String projectName, Date createDate, Date startDate, Date deadlineDate, Date finishDate) {
 		this.projectName = projectName;
 		this.createDate = createDate;
 		this.startDate = startDate;
@@ -132,17 +131,15 @@ public class Project implements Serializable {
 		this.finishDate = finishDate;
 	}
 
-	
-	public Project(String projectName, Date createDate, Date startDate, Date deadlineDate, Date finishDate,
-			String description, Integer projectState, String projectOutput) {
+	public Project(String projectName, Date createDate, Date startDate, Date deadlineDate, String description,
+			String projectOutput) {
 		super();
 		this.projectName = projectName;
 		this.createDate = createDate;
 		this.startDate = startDate;
 		this.deadlineDate = deadlineDate;
-		this.finishDate = finishDate;
 		this.description = description;
-		this.projectState = projectState;
+		this.projectState = 0;
 		this.projectOutput = projectOutput;
 	}
 

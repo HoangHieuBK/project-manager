@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +44,7 @@ public class ProjectController {
 
 	@Autowired
 	TaskService taskService;
-	
+
 	@GetMapping("/projects")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<Project> listProject() {
@@ -56,7 +57,16 @@ public class ProjectController {
 	public ResponseEntity<?> detailProject(@PathVariable int id) {
 		Optional<Project> projectData = projectService.getProjecByiD(id);
 		if (projectData.isPresent()) {
-			return new ResponseEntity<>(projectData.get(), HttpStatus.OK);
+			Project project = projectData.get();
+			ProjectDTO projectDTO = new ProjectDTO(project.getProjectId(), project.getProjectName(), project.getCreateDate(),
+					project.getStartDate(), project.getDeadlineDate(), project.getFinishDate(), project.getDescription(), 
+					project.getProjectState(), project.getProjectOutput());
+			int numOfStaff = project.getStaffProject().size();
+			projectDTO.setNumberOfStaff(numOfStaff);
+			int numOfTask = project.getTask().size();
+			projectDTO.setNumberOfTask(numOfTask);
+			
+			return new ResponseEntity<>(projectDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -71,8 +81,8 @@ public class ProjectController {
 		}
 
 		Project project = new Project(projectDTO.getProjectName(), projectDTO.getCreateDate(),
-				projectDTO.getStartDate(), projectDTO.getDeadlineDate(), projectDTO.getFinishDate(),
-				projectDTO.getDescription(), projectDTO.getProjectState(), projectDTO.getProjectOutput());
+				projectDTO.getStartDate(), projectDTO.getDeadlineDate(), projectDTO.getDescription(),
+				projectDTO.getProjectOutput());
 
 		projectService.saveProject(project);
 		return new ResponseEntity<>(new ResponseMessage("Create Project Successfully!"), HttpStatus.OK);
@@ -92,9 +102,7 @@ public class ProjectController {
 			_project.setCreateDate(projectDTO.getCreateDate());
 			_project.setStartDate(projectDTO.getStartDate());
 			_project.setDeadlineDate(projectDTO.getDeadlineDate());
-			_project.setFinishDate(projectDTO.getFinishDate());
 			_project.setDescription(projectDTO.getDescription());
-			_project.setProjectState(projectDTO.getProjectState());
 			_project.setProjectOutput(projectDTO.getProjectOutput());
 
 			projectService.saveProject(_project);
@@ -113,57 +121,54 @@ public class ProjectController {
 		return new ResponseEntity<>("Project has been deleted!", HttpStatus.OK);
 	}
 
-	
 	@GetMapping(value = "/projects/{id}/staffs")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<Staff> getstaffInProject(@PathVariable int id) {
 		List<Staff> listStaffOfProject = projectService.getListStaffOfProject(id);
 		return listStaffOfProject;
 	}
-	
+
 	@GetMapping(value = "/projects/{id}/tasks")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<Task> getTasksInProject(@PathVariable int id) {
 		List<Task> listTaskOfProject = projectService.getListTaskOfProject(id);
 		return listTaskOfProject;
 	}
-	
+
 	@GetMapping(value = "/projects/{id}/previousTasks")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<Task> getPreviousTaskInProject(@PathVariable int id) {
 		List<Task> listPreviousTaskOfProject = projectService.getListBigTaskOfProject(id);
 		return listPreviousTaskOfProject;
 	}
-	
-	
+
 	@PostMapping(value = "projects/{id}/addTask")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addTaskToProject(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
 		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
-				taskDTO.getDateStart(), taskDTO.getDeadlineDate(),
-				taskDTO.getDiscription(), taskDTO.getTaskOutput());
+				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());
 
 		Project project = projectService.getProjecByiD(id).get();
 		if (project != null) {
 			task.setProjectId(project);
 		}
-		
+
 		List<Task> listBigTaskOfProject = projectService.getListBigTaskOfProject(id);
 
-		Set<Task> listPreviousTaskOfProject =  new HashSet<Task>(listBigTaskOfProject);
-        task.setPreviousTask(listPreviousTaskOfProject);
-        
+		Set<Task> listPreviousTaskOfProject = new HashSet<Task>(listBigTaskOfProject);
+		task.setPreviousTask(listPreviousTaskOfProject);
+
 		taskService.saveTask(task);
 		return new ResponseEntity<>(new ResponseMessage("Create Task Successfully!"), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = "/projects/{id}/staffsNotIn")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<Staff> getstaffNotInProject(@PathVariable int id) {
 		List<Staff> listStaffNotInProject = projectService.getListStaffNotInProject(id);
 		return listStaffNotInProject;
 	}
-	
+
 	@PostMapping("/projects/{id}/staff/add/{idStaff}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addStaffInproject(@PathVariable int id, @PathVariable int idStaff) {
