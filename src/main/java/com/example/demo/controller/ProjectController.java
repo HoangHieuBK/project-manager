@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dto.ProjectDTO;
 import com.example.demo.dto.ResponseMessage;
+import com.example.demo.dto.StaffDTO;
 import com.example.demo.dto.TaskDTO;
 import com.example.demo.entity.Project;
 import com.example.demo.entity.Staff;
@@ -123,9 +124,18 @@ public class ProjectController {
 
 	@GetMapping(value = "/projects/{id}/staffs")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Staff> getstaffInProject(@PathVariable int id) {
+	public List<StaffDTO> getstaffInProject(@PathVariable int id) {
 		List<Staff> listStaffOfProject = projectService.getListStaffOfProject(id);
-		return listStaffOfProject;
+		
+		List<StaffDTO> listStaffDTO = new ArrayList<StaffDTO>();
+
+		listStaffOfProject.forEach(staff -> {
+			StaffDTO _staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
+					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
+					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
+			listStaffDTO.add(_staffDTO);
+		});
+		return listStaffDTO;
 	}
 
 	@GetMapping(value = "/projects/{id}/tasks")
