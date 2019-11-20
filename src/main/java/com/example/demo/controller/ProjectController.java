@@ -59,14 +59,14 @@ public class ProjectController {
 		Optional<Project> projectData = projectService.getProjecByiD(id);
 		if (projectData.isPresent()) {
 			Project project = projectData.get();
-			ProjectDTO projectDTO = new ProjectDTO(project.getProjectId(), project.getProjectName(), project.getCreateDate(),
-					project.getStartDate(), project.getDeadlineDate(), project.getFinishDate(), project.getDescription(), 
-					project.getProjectState(), project.getProjectOutput());
+			ProjectDTO projectDTO = new ProjectDTO(project.getProjectId(), project.getProjectName(),
+					project.getCreateDate(), project.getStartDate(), project.getDeadlineDate(), project.getFinishDate(),
+					project.getDescription(), project.getProjectState(), project.getProjectOutput());
 			int numOfStaff = project.getStaffProject().size();
 			projectDTO.setNumberOfStaff(numOfStaff);
 			int numOfTask = project.getTask().size();
 			projectDTO.setNumberOfTask(numOfTask);
-			
+
 			return new ResponseEntity<>(projectDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -126,7 +126,7 @@ public class ProjectController {
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public List<StaffDTO> getstaffInProject(@PathVariable int id) {
 		List<Staff> listStaffOfProject = projectService.getListStaffOfProject(id);
-		
+
 		List<StaffDTO> listStaffDTO = new ArrayList<StaffDTO>();
 
 		listStaffOfProject.forEach(staff -> {
@@ -174,9 +174,17 @@ public class ProjectController {
 
 	@GetMapping(value = "/projects/{id}/staffsNotIn")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Staff> getstaffNotInProject(@PathVariable int id) {
+	public List<StaffDTO> getstaffNotInProject(@PathVariable int id) {
 		List<Staff> listStaffNotInProject = projectService.getListStaffNotInProject(id);
-		return listStaffNotInProject;
+		List<StaffDTO> listStaffDTO = new ArrayList<StaffDTO>();
+
+		listStaffNotInProject.forEach(staff -> {
+			StaffDTO _staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
+					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
+					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
+			listStaffDTO.add(_staffDTO);
+		});
+		return listStaffDTO;
 	}
 
 	@PostMapping("/projects/{id}/staff/add/{idStaff}")
