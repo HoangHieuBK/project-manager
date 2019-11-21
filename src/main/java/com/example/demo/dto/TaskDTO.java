@@ -11,6 +11,7 @@ import com.example.demo.entity.Task;
 public class TaskDTO {
 
 	private Integer taskId;
+	private Integer taskIdParent;
 	private String taskName;
 	private String nameCreate;
 	private Date dateCreate;
@@ -21,16 +22,19 @@ public class TaskDTO {
 	private String discription;
 	private String taskOutput;
 	private Project project;
-	private Staff staff;
+	private Integer staffId;
+	private String staffName;
 	private Set<Task> previousTask = new HashSet<>();
 
 	public TaskDTO() {
 		super();
 	}
 
-	public TaskDTO(String taskName, String nameCreate, Date dateCreate, Date dateStart, Date deadlineDate,
+	public TaskDTO(Integer taskId, Integer taskIdParent, String taskName, String nameCreate, Date dateCreate, Date dateStart, Date deadlineDate,
 		 Integer taskState, String discription, String taskOutput) {
 		super();
+		this.taskId = taskId;
+		this.taskIdParent = taskIdParent;
 		this.taskName = taskName;
 		this.nameCreate = nameCreate;
 		this.dateCreate = dateCreate;
@@ -47,6 +51,14 @@ public class TaskDTO {
 
 	public void setTaskId(Integer taskId) {
 		this.taskId = taskId;
+	}
+
+	public Integer getTaskIdParent() {
+		return taskIdParent;
+	}
+
+	public void setTaskIdParent(Integer taskIdParent) {
+		this.taskIdParent = taskIdParent;
 	}
 
 	public String getTaskName() {
@@ -129,12 +141,20 @@ public class TaskDTO {
 		this.project = project;
 	}
 
-	public Staff getStaff() {
-		return staff;
+	public Integer getStaffId() {
+		return staffId;
 	}
 
-	public void setStaff(Staff staff) {
-		this.staff = staff;
+	public void setStaffId(Integer staffId) {
+		this.staffId = staffId;
+	}
+
+	public String getStaffName() {
+		return staffName;
+	}
+
+	public void setStaffName(String staffName) {
+		this.staffName = staffName;
 	}
 
 	public Set<Task> getPreviousTask() {

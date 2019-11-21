@@ -103,7 +103,7 @@ public class TaskController {
 		}
 	}
 
-	@DeleteMapping(value = "project/{id}/task/delete/{idtask}")
+	@DeleteMapping(value = "projects/{id}/task/delete/{idtask}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> deleteTask(@PathVariable("id") int id, @PathVariable("idtask") int idtask) {
 		List<Task> listTaskOfProject = new ArrayList<Task>();

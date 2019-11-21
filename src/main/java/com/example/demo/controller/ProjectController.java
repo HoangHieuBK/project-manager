@@ -140,9 +140,18 @@ public class ProjectController {
 
 	@GetMapping(value = "/projects/{id}/tasks")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Task> getTasksInProject(@PathVariable int id) {
+	public List<TaskDTO> getTasksInProject(@PathVariable int id) {
 		List<Task> listTaskOfProject = projectService.getListTaskOfProject(id);
-		return listTaskOfProject;
+		List<TaskDTO> listTaskDTO = new ArrayList<>();
+		
+		listTaskOfProject.forEach(task -> {
+			TaskDTO _taskDTO = new TaskDTO(task.getTaskId(), task.getTaskIdparent(), task.getTaskName(), task.getNameCreate(), task.getDateCreate(), 
+					task.getDateStart(), task.getDeadlineDate(), task.getTaskState(), task.getDiscription(), task.getTaskOutput());
+			        _taskDTO.setStaffName(task.getStaffId().getName());
+			        _taskDTO.setStaffId(task.getStaffId().getStaffId());
+			listTaskDTO.add(_taskDTO);
+		});
+		return listTaskDTO;
 	}
 
 	@GetMapping(value = "/projects/{id}/previousTasks")
