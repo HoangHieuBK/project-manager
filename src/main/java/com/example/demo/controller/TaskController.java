@@ -52,7 +52,7 @@ public class TaskController {
 	@Autowired
 	TaskProgressService taskProgressService;
 
-	@PostMapping(value = "project/{id}/staff/{idstaff}/tasks/add")
+	@PostMapping(value = "projects/{id}/staff/{idstaff}/addTask")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addTaskToStaff(@PathVariable("id") int id, @PathVariable("idstaff") int idstaff,
 			@RequestBody TaskDTO taskDTO) {

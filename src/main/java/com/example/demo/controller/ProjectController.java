@@ -143,12 +143,15 @@ public class ProjectController {
 	public List<TaskDTO> getTasksInProject(@PathVariable int id) {
 		List<Task> listTaskOfProject = projectService.getListTaskOfProject(id);
 		List<TaskDTO> listTaskDTO = new ArrayList<>();
-		
+
 		listTaskOfProject.forEach(task -> {
-			TaskDTO _taskDTO = new TaskDTO(task.getTaskId(), task.getTaskIdparent(), task.getTaskName(), task.getNameCreate(), task.getDateCreate(), 
-					task.getDateStart(), task.getDeadlineDate(), task.getTaskState(), task.getDiscription(), task.getTaskOutput());
-			        _taskDTO.setStaffName(task.getStaffId().getName());
-			        _taskDTO.setStaffId(task.getStaffId().getStaffId());
+			TaskDTO _taskDTO = new TaskDTO(task.getTaskId(), task.getTaskIdparent(), task.getTaskName(),
+					task.getNameCreate(), task.getDateCreate(), task.getDateStart(), task.getDeadlineDate(),
+					task.getTaskState(), task.getDiscription(), task.getTaskOutput());
+			if (task.getStaffId() != null) {
+				_taskDTO.setStaffName(task.getStaffId().getName());
+				_taskDTO.setStaffId(task.getStaffId().getStaffId());
+			}
 			listTaskDTO.add(_taskDTO);
 		});
 		return listTaskDTO;
