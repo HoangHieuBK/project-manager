@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dto.ResponseMessage;
 import com.example.demo.dto.StaffDTO;
+import com.example.demo.dto.TaskDTO;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Role;
@@ -73,28 +74,28 @@ public class StaffController {
 			StaffDTO staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
 					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
 					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
-			        staffDTO.setEmail(staff.getAccountId().getEmail());
-			        staffDTO.setManagerName(staff.getDepartmentId().getManagerName());
-			        
-					Set<Role> roles = staff.getAccountId().getRoles();
-					Set<String> strRoles = new HashSet<String>();
-					roles.forEach(role -> {
-						switch (role.getRoleName()) {
-						case ROLE_ADMIN:
-							strRoles.add("ROLE_ADMIN");
-							break;
-						case ROLE_PM: 
-							strRoles.add("ROLE_PM");
-							break;
-						case ROLE_USER:
-							strRoles.add("ROLE_USER");
-							break;
-						default:
-							break;
-						}
-					});
-					
-					staffDTO.setRole(strRoles);
+			staffDTO.setEmail(staff.getAccountId().getEmail());
+			staffDTO.setManagerName(staff.getDepartmentId().getManagerName());
+
+			Set<Role> roles = staff.getAccountId().getRoles();
+			Set<String> strRoles = new HashSet<String>();
+			roles.forEach(role -> {
+				switch (role.getRoleName()) {
+				case ROLE_ADMIN:
+					strRoles.add("ROLE_ADMIN");
+					break;
+				case ROLE_PM:
+					strRoles.add("ROLE_PM");
+					break;
+				case ROLE_USER:
+					strRoles.add("ROLE_USER");
+					break;
+				default:
+					break;
+				}
+			});
+
+			staffDTO.setRole(strRoles);
 			return new ResponseEntity<>(staffDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -166,9 +167,21 @@ public class StaffController {
 
 	@GetMapping(value = "/staffs/{idstaff}/tasks")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Task> getTaskOfStaff(@PathVariable int idstaff) {
+	public List<TaskDTO> getTaskOfStaff(@PathVariable int idstaff) {
 		List<Task> listTaskOfStaff = staffService.getListTask(idstaff);
-		return listTaskOfStaff;
+		List<TaskDTO> listTaskDTO = new ArrayList<>();
+
+		listTaskOfStaff.forEach(task -> {
+			TaskDTO _taskDTO = new TaskDTO(task.getTaskId(), task.getTaskIdparent(), task.getTaskName(),
+					task.getNameCreate(), task.getDateCreate(), task.getDateStart(), task.getDeadlineDate(),
+					task.getTaskState(), task.getDiscription(), task.getTaskOutput());
+			if (task.getStaffId() != null) {
+				_taskDTO.setStaffName(task.getStaffId().getName());
+				_taskDTO.setStaffId(task.getStaffId().getStaffId());
+			}
+			listTaskDTO.add(_taskDTO);
+		});
+		return listTaskDTO;
 	}
 
 }
