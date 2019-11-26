@@ -19,6 +19,14 @@ public class EventDTO {
 	}
 
 
+	public EventDTO(String title, Date start, Date end) {
+		super();
+		this.title = title;
+		this.start = start;
+		this.end = end;
+	}
+
+
 	public EventDTO(String title, String description, Date start, Date end, Staff staff) {
 		super();
 		this.title = title;
