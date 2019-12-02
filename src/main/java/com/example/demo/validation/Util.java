@@ -100,13 +100,13 @@ public final class Util {
         label.append("[");
         for (Date date : listDate) {
             label.setLength(0);
-            label.append("\"");
+//            label.append("\"");
             label.append(date.getDate());
             label.append("-");
             label.append(date.getMonth() + 1);
             label.append("-");
             label.append(date.getYear() + 1900);
-            label.append("\"");
+//            label.append("\"");
             listLabel.add(label.toString());
         }
         return listLabel;
