@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "progress_task")
 public class TaskProgress implements Serializable {
@@ -40,6 +42,7 @@ public class TaskProgress implements Serializable {
 	@Column(name = "detail_log")
 	private String detailLog;
 
+	@JsonIgnore
 	@JoinColumn(name = "task_id", referencedColumnName = "task_id")
 	@ManyToOne(optional = false)
 	private Task taskId;
