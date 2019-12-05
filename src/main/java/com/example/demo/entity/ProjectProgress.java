@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "progress_project")
 public class ProjectProgress implements Serializable{
@@ -39,6 +41,8 @@ public class ProjectProgress implements Serializable{
 
   @Column(name = "detail_log")
   private String detailLog;
+  
+  @JsonIgnore
   @JoinColumn(name = "project_id", referencedColumnName = "project_id")
   @ManyToOne(optional = false)
   private Project projectId;
