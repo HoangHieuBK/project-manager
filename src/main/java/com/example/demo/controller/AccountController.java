@@ -188,10 +188,10 @@ public class AccountController {
 	// xoa 1 account
 	@DeleteMapping("/accounts/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> deleteAccount(@PathVariable("id") int id) {
+	public ResponseEntity<?> deleteAccount(@PathVariable("id") int id) {
 		System.out.println("Delete account with ID = " + id + "...");
 		accountService.deleteAccount(id);
-		return new ResponseEntity<>("Account has been deleted!", HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Account has been deleted!"), HttpStatus.OK);
 	}
 
 }

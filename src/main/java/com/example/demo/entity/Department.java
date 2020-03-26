@@ -26,6 +26,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -47,12 +49,18 @@ public class Department implements Serializable {
     @Basic(optional = false)
     @Column(name = "department_id")
     private Integer departmentId;
+
     @Basic(optional = false)
+    @NotBlank
     @Column(name = "department_name")
+
     private String departmentName;
+
     @Basic(optional = false)
+    @NotBlank
     @Column(name = "manager_name")
     private String managerName;
+
     @Basic(optional = false)
     @Column(name = "discription")
     private String discription;

@@ -104,10 +104,10 @@ public class DepartmentController {
 
 	@DeleteMapping("/departments/delete/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> delete(@PathVariable("id") int id) {
+	public ResponseEntity<?> delete(@PathVariable("id") int id) {
 		System.out.println("Delete department with ID = " + id + "...");
 		departmentService.deleteDepartment(id);
-		return new ResponseEntity<>("Department has been deleted!", HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Department has been deleted!"), HttpStatus.OK);
 	}
 
 }
