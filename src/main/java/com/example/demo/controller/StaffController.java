@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -112,13 +109,17 @@ public class StaffController {
 		Staff staff = new Staff(staffDTO.getName(), staffDTO.getGender(), staffDTO.getPossition(), staffDTO.getSkill(),
 				staffDTO.getTelephone(), staffDTO.getDescription());
 
-		Department objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName())
-				.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Department not find."));
-		staff.setDepartmentId(objDepart);
+		Optional<Department> objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName());
+		if(!objDepart.isPresent()){
+			return new ResponseEntity<>(new ResponseMessage("Fail! -> Cause: Department not find."), HttpStatus.BAD_REQUEST);
+		}
+		staff.setDepartmentId(objDepart.get());
 
-		Account objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName())
-				.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account not find."));
-		staff.setAccountId(objAccount);
+		Optional<Account> objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName());
+		if(!objAccount.isPresent()) {
+			return new ResponseEntity<>(new ResponseMessage("Fail! -> Cause: Account not find."), HttpStatus.BAD_REQUEST);
+		}
+		staff.setAccountId(objAccount.get());
 
 		staffService.save(staff);
 		return new ResponseEntity<>(new ResponseMessage("Create Staff Successfully!"), HttpStatus.OK);
@@ -140,15 +141,17 @@ public class StaffController {
 			staffData.setTelephone(staffDTO.getTelephone());
 			staffData.setDescription(staffDTO.getDescription());
 
-			Department objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName())
-					.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Department not find."));
-			staffData.setDepartmentId(objDepart);
+			Optional<Department> objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName());
+			if(!objDepart.isPresent()){
+				return new ResponseEntity<>(new ResponseMessage("Fail! -> Cause: Department not find."), HttpStatus.BAD_REQUEST);
+			}
+			staffData.setDepartmentId(objDepart.get());
 
-			Account objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName())
-					.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account not find."));
-			staffData.setAccountId(objAccount);
-
-			staffService.save(staffData);
+			Optional<Account> objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName());
+			if(!objAccount.isPresent()) {
+				return new ResponseEntity<>(new ResponseMessage("Fail! -> Cause: Account not find."), HttpStatus.BAD_REQUEST);
+			}
+			staffData.setAccountId(objAccount.get());
 
 			return new ResponseEntity<>(new ResponseMessage("Edit staff successfully!"), HttpStatus.OK);
 		} else {
@@ -158,10 +161,10 @@ public class StaffController {
 
 	@DeleteMapping("/staffs/delete/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-	public ResponseEntity<String> delete(@PathVariable int id) {
+	public ResponseEntity<?> delete(@PathVariable int id) {
 		System.out.println("Delete staff with ID = " + id + "...");
 		staffService.delete(id);
-		return new ResponseEntity<>("Staff has been deleted!", HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Staff has been deleted!"), HttpStatus.OK);
 
 	}
 
