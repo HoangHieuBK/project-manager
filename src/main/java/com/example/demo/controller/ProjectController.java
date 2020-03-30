@@ -69,7 +69,7 @@ public class ProjectController {
 
 			return new ResponseEntity<>(projectDTO, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new ResponseMessage("Project not found!"), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -110,7 +110,7 @@ public class ProjectController {
 
 			return new ResponseEntity<>(new ResponseMessage("Edit project successfully!"), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new ResponseMessage("Project not found!"), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -119,7 +119,7 @@ public class ProjectController {
 	public ResponseEntity<?> deleteProject(@PathVariable int id) {
 		System.out.println("Delete project with ID = " + id + "...");
 		projectService.deleteProjectById(id);
-		return new ResponseEntity<>("Project has been deleted!", HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Project has been deleted!"), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/projects/{id}/staffs")
@@ -203,14 +203,14 @@ public class ProjectController {
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addStaffInproject(@PathVariable int id, @PathVariable int idStaff) {
 		projectService.addStaffInProject(id, idStaff);
-		return new ResponseEntity<>("Staff has been added into project!", HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Staff has been added into project!"), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/projects/{id}/staff/{idStaff}/delete")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> deleteStaffInProject(@PathVariable int id, @PathVariable int idStaff) {
 		projectService.deleteStaffIdInProject(idStaff, id);
-		return new ResponseEntity<>("Staff has been deleted from project!", HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Staff has been deleted from project!"), HttpStatus.OK);
 	}
 
 }

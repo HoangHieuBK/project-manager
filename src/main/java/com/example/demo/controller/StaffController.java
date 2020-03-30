@@ -135,7 +135,6 @@ public class StaffController {
 		if (staffData != null) {
 			staffData.setName(staffDTO.getName());
 			staffData.setGender(staffDTO.getGender());
-			;
 			staffData.setPossition(staffDTO.getPossition());
 			staffData.setSkill(staffDTO.getSkill());
 			staffData.setTelephone(staffDTO.getTelephone());
