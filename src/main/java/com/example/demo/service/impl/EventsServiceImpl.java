@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class EventsServiceImpl implements EventsService{
 	public List<Events> findByIdStaff(int idStaff) {
 		// TODO Auto-generated method stub
 		if(eventsRepo.getEventByStaff(idStaff).isEmpty()) {
-			return null;
+			return new ArrayList<>();
 		}
 		
 		return eventsRepo.getEventByStaff(idStaff);

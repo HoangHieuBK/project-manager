@@ -80,7 +80,10 @@ public class ProjectController {
 			return new ResponseEntity<>(new ResponseMessage("Fail -> Project is already existed!"),
 					HttpStatus.BAD_REQUEST);
 		}
-
+		if (projectDTO.getDeadlineDate().before(projectDTO.getStartDate())) {
+			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+					HttpStatus.BAD_REQUEST);
+		}
 		Project project = new Project(projectDTO.getProjectName(), projectDTO.getCreateDate(),
 				projectDTO.getStartDate(), projectDTO.getDeadlineDate(), projectDTO.getDescription(),
 				projectDTO.getProjectOutput());
@@ -93,6 +96,10 @@ public class ProjectController {
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> editProject(@PathVariable("id") int id, @RequestBody ProjectDTO projectDTO) {
 
+		if (projectDTO.getDeadlineDate().before(projectDTO.getStartDate())) {
+			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+					HttpStatus.BAD_REQUEST);
+		}
 		System.out.println("Update project with ID = " + id + "...");
 
 		Optional<Project> projectData = projectService.getProjecByiD(id);

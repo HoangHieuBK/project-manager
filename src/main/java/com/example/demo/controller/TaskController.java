@@ -56,6 +56,10 @@ public class TaskController {
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addTaskToStaff(@PathVariable("id") int id, @PathVariable("idstaff") int idstaff,
 			@RequestBody TaskDTO taskDTO) {
+		if (taskDTO.getDeadlineDate().before(taskDTO.getDateStart())) {
+			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+					HttpStatus.BAD_REQUEST);
+		}
 		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
 				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());
 
@@ -79,7 +83,10 @@ public class TaskController {
 	@PostMapping(value = "/tasks/{id}/addsubtask")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addSubTask(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
-
+		if (taskDTO.getDeadlineDate().before(taskDTO.getDateStart())) {
+			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+					HttpStatus.BAD_REQUEST);
+		}
 		Task parentTask = taskService.findById(id);
 		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
 				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());

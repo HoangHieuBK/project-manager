@@ -31,32 +31,39 @@ import com.example.demo.service.StaffService;
 @CrossOrigin(origins = "*")
 @RestController
 public class TimeWorkController {
-	@Autowired
-	private EventsService eventsService;
+    @Autowired
+    private EventsService eventsService;
 
-	@Autowired
-	private StaffService staffService;
+    @Autowired
+    private StaffService staffService;
 
-	@GetMapping(value = "staffs/{id}/timeworks")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Events> getInfoTime(@PathVariable("id") int id) {
-		List<Events> listEvents = new ArrayList<Events>();
-		try {
-			listEvents = eventsService.findByIdStaff(id);
-		} catch (Exception e) {
-			System.out.println("khoong co event nao !");
-		}
-		return listEvents;
-	}
+    @GetMapping(value = "staffs/{id}/timeworks")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<?> getInfoTime(@PathVariable("id") int id) {
+        List<Events> listEvents = new ArrayList<Events>();
+        try {
+            listEvents = eventsService.findByIdStaff(id);
+        } catch (Exception e) {
+            System.out.println("khoong co event nao !");
+        }
+        if (listEvents.isEmpty()) {
+            return new ResponseEntity<>(new ResponseMessage("Not Schedule of staff!"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(listEvents, HttpStatus.OK);
+    }
 
-	@PostMapping(value = "staffs/{id}/addTimeworks")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<?> addEvent(@RequestBody EventDTO eventDTO, @PathVariable("id") int id) {
-		Events event = new Events(eventDTO.getTitle(), eventDTO.getDescription(), eventDTO.getStart(), eventDTO.getEnd());
-		Staff staff = staffService.findOne(id);
-		event.setStaffId(staff);
-		eventsService.save(event);
+    @PostMapping(value = "staffs/{id}/addTimeworks")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<?> addEvent(@RequestBody EventDTO eventDTO, @PathVariable("id") int id) {
+        if (eventDTO.getEnd().before(eventDTO.getStart())) {
+            return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        Events event = new Events(eventDTO.getTitle(), eventDTO.getDescription(), eventDTO.getStart(), eventDTO.getEnd());
+        Staff staff = staffService.findOne(id);
+        event.setStaffId(staff);
+        eventsService.save(event);
 
-		return new ResponseEntity<>(new ResponseMessage("Create Event Successfully!"), HttpStatus.OK);
-	}
+        return new ResponseEntity<>(new ResponseMessage("Create Event Successfully!"), HttpStatus.OK);
+    }
 }
