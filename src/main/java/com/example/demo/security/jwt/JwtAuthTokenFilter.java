@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.demo.security.services.AccountDetailsServiceImpl;
@@ -21,7 +22,7 @@ import com.example.demo.security.services.AccountDetailsServiceImpl;
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private JwtProvider tokenProvider;
+	 public JwtProvider tokenProvider;
 
 	@Autowired
 	private AccountDetailsServiceImpl accountDetailsService;

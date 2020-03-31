@@ -56,4 +56,8 @@ public class JwtProvider {
 	public String getAccountNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
+
+	public void wear(){
+		System.out.println("are you wanna move!");
+	}
 }

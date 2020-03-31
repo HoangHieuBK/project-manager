@@ -39,14 +39,17 @@ public class TimeWorkController {
 
 	@GetMapping(value = "staffs/{id}/timeworks")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Events> getInfoTime(@PathVariable("id") int id) {
+	public ResponseEntity<?> getInfoTime(@PathVariable("id") int id) {
 		List<Events> listEvents = new ArrayList<Events>();
 		try {
 			listEvents = eventsService.findByIdStaff(id);
 		} catch (Exception e) {
 			System.out.println("khoong co event nao !");
 		}
-		return listEvents;
+		if(listEvents.isEmpty()){
+			return new ResponseEntity<>(new ResponseMessage("Not schedule of staff!"), HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(listEvents, HttpStatus.OK);
 	}
 
 	@PostMapping(value = "staffs/{id}/addTimeworks")
@@ -56,7 +59,6 @@ public class TimeWorkController {
 		Staff staff = staffService.findOne(id);
 		event.setStaffId(staff);
 		eventsService.save(event);
-
 		return new ResponseEntity<>(new ResponseMessage("Create Event Successfully!"), HttpStatus.OK);
 	}
 }
