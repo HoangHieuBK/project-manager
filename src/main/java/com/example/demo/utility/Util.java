@@ -10,6 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 public final class Util {
+
+	public static boolean checkEndDateBeforeStartDate(Date startDate, Date endDate) {
+		return endDate.before(startDate);
+	}
+
 	@SuppressWarnings("deprecation")
 	public static List<Date> getListDate(Date startDate, Date finishDate, Date lastDateFromLog) {
 		List<Date> listDate = new ArrayList<>();

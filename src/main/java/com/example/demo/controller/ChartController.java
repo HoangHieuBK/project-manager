@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -105,9 +106,13 @@ public class ChartController {
 	
 	@GetMapping("/projects/{id}/projectProgresses")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<ProjectProgress> listProjectProgresses(@PathVariable("id") int id) {
-		List<ProjectProgress> workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
-		return workLogList;
+	public ResponseEntity<?> listProjectProgresses(@PathVariable("id") int id) {
+		List<ProjectProgress> workLogList = new ArrayList<>();
+		workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
+		if(workLogList.isEmpty()){
+			return new ResponseEntity<>(new ResponseMessage("List Project Progress is empty!"), HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(workLogList, HttpStatus.OK);
 	}
 	
 	@GetMapping("/projects/{id}/labelProjectFromListDate")

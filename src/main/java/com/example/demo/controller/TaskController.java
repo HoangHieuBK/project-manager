@@ -120,7 +120,7 @@ public class TaskController {
 			if (_task.getTaskId() == listTaskOfProject.get(i).getTaskIdparent()) {
 				System.out.println("task nay dang co task con nen ban phai xoa task con truoc !");
 				String message = "Task " + _task.getTaskName()
-						+ " co task con, neu muon xoa ban phai xoa task con truoc!";
+						+ " has sub task. If you want to delete this task, you must delete this previous sub task!";
 				return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.PRECONDITION_REQUIRED);
 			}
 		}

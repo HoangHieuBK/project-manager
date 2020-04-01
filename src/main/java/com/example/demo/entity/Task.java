@@ -112,7 +112,7 @@ public class Task implements Serializable {
 	private Staff staffId;
 	
 	@JsonIgnore 
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(cascade = { CascadeType.PERSIST })
 	@JoinTable(name = "task_relation", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "previous_task_id") })
 	private Set<Task> previousTask = new HashSet<>();

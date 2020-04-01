@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.example.demo.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -174,6 +175,12 @@ public class ProjectController {
 	@PostMapping(value = "projects/{id}/addTask")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<?> addTaskToProject(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
+
+		if (Util.checkEndDateBeforeStartDate(taskDTO.getDateStart(), taskDTO.getDeadlineDate())) {
+			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+					HttpStatus.BAD_REQUEST);
+		}
+
 		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
 				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());
 
