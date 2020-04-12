@@ -40,113 +40,116 @@ import com.example.demo.validation.Util;
 @CrossOrigin(origins = "*")
 @RestController
 public class ChartController {
-	@Autowired
-	private FeedBackService feebackService;
-	@Autowired
-	private TaskProgressService taskProgressService;
-	@Autowired
-	private ProjectService projectService;
-	@Autowired
-	private ProjectProgressService projectProgressService;
+    @Autowired
+    private FeedBackService feebackService;
+    @Autowired
+    private TaskProgressService taskProgressService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private ProjectProgressService projectProgressService;
 
-	@Autowired
-	private TaskService taskService;
+    @Autowired
+    private TaskService taskService;
 
-	@GetMapping("/tasks/{id}/taskProgresses")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<TaskProgress> listTaskProgresses(@PathVariable("id") int id) {
-		List<TaskProgress> workLogList = taskProgressService.findByTaskIDOrderByDateCreateAsc(id);
-		return workLogList;
-	}
-	
-	@GetMapping("/tasks/{id}/labelFromListDate")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<String> listLabelTask(@PathVariable("id") int id) {
-		Task task = taskService.findById(id);
-		List<TaskProgress> workLogList = taskProgressService.findByTaskIDOrderByDateCreateAsc(id);
-		List<Date> listDate;
-		if (workLogList.size() > 0) {
-			listDate = Util.getListDate(task.getDateStart(), task.getDeadlineDate(),
-					workLogList.get(workLogList.size() - 1).getDateLog());
-		} else {
-			listDate = Util.getListDate(task.getDateStart(), task.getDeadlineDate(), new Date(0));
-		}
-		List<String> listLabelsFromListDate =  Util.getLabelFromListDate(listDate);
+    @GetMapping("/tasks/{id}/taskProgresses")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<?> listTaskProgresses(@PathVariable("id") int id) {
+        List<TaskProgress> workLogList = taskProgressService.findByTaskIDOrderByDateCreateAsc(id);
+        if (workLogList.isEmpty()) {
+            return new ResponseEntity<>(new ResponseMessage("TaskProgress Not Found!"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(workLogList, HttpStatus.OK);
+    }
 
-		return listLabelsFromListDate;
-	}
+    @GetMapping("/tasks/{id}/labelFromListDate")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public List<String> listLabelTask(@PathVariable("id") int id) {
+        Task task = taskService.findById(id);
+        List<TaskProgress> workLogList = taskProgressService.findByTaskIDOrderByDateCreateAsc(id);
+        List<Date> listDate;
+        if (workLogList.size() > 0) {
+            listDate = Util.getListDate(task.getDateStart(), task.getDeadlineDate(),
+                    workLogList.get(workLogList.size() - 1).getDateLog());
+        } else {
+            listDate = Util.getListDate(task.getDateStart(), task.getDeadlineDate(), new Date(0));
+        }
+        List<String> listLabelsFromListDate = Util.getLabelFromListDate(listDate);
 
-	@GetMapping("/tasks/{id}/listExpectProgresses")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Double> listTaskExpectProgresses(@PathVariable("id") int id) {
-		Task task = taskService.findById(id);
-		List<Double> listExpectProgresses =  Util.getListExpectProgress(task.getDateStart(), task.getDeadlineDate());
-		return listExpectProgresses;
-	}
-	
-	@GetMapping("/tasks/{id}/listActualProgresses")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Double> getListTaskActualProgress(@PathVariable("id") int id) {
-		Task task = taskService.findById(id);
-		List<TaskProgress> workLogList = taskProgressService.findByTaskIDOrderByDateCreateAsc(id);
-		List<Double> listActualProgresses =  Util.getListActualProgress(task.getDateStart(), workLogList);
-		return listActualProgresses;
-	}
-	
-	@PostMapping("/tasks/{id}/addTaskProgress")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<?> addTaskProgress(@PathVariable("id") int id, @RequestBody TaskProgressDTO taskprogressDTO) {
-	    TaskProgress taskProgress = new TaskProgress(taskprogressDTO.getDateLog(), taskprogressDTO.getProgress(), taskprogressDTO.getDetailLog());
-		Task task = taskService.findById(id);
-		taskProgress.setTaskId(task);
-		taskProgressService.createTaskProgress(taskProgress);
-		return new ResponseEntity<>(new ResponseMessage("Log Schedule Successfully!"), HttpStatus.OK);
-	}
+        return listLabelsFromListDate;
+    }
 
-	
-	@GetMapping("/projects/{id}/projectProgresses")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<?> listProjectProgresses(@PathVariable("id") int id) {
-		List<ProjectProgress> workLogList = new ArrayList<>();
-		workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
-		if(workLogList.isEmpty()){
-			return new ResponseEntity<>(new ResponseMessage("List Project Progress is empty!"), HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(workLogList, HttpStatus.OK);
-	}
-	
-	@GetMapping("/projects/{id}/labelProjectFromListDate")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<String> listLabelProject(@PathVariable("id") int id) {
-		Project project = projectService.findByProjectId(id);
-		List<ProjectProgress> workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
-		List<Date> listDate;
-		if (workLogList.size() > 0) {
-			listDate = Util.getListDate(project.getStartDate(), project.getDeadlineDate(),
-					workLogList.get(workLogList.size() - 1).getDateLog());
-		} else {
-			listDate = Util.getListDate(project.getStartDate(), project.getDeadlineDate(), new Date(0));
-		}
-		List<String> listLabelProjectFromListDate =  Util.getLabelFromListDate(listDate);
+    @GetMapping("/tasks/{id}/listExpectProgresses")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public List<Double> listTaskExpectProgresses(@PathVariable("id") int id) {
+        Task task = taskService.findById(id);
+        List<Double> listExpectProgresses = Util.getListExpectProgress(task.getDateStart(), task.getDeadlineDate());
+        return listExpectProgresses;
+    }
 
-		return listLabelProjectFromListDate;
-	}
+    @GetMapping("/tasks/{id}/listActualProgresses")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public List<Double> getListTaskActualProgress(@PathVariable("id") int id) {
+        Task task = taskService.findById(id);
+        List<TaskProgress> workLogList = taskProgressService.findByTaskIDOrderByDateCreateAsc(id);
+        List<Double> listActualProgresses = Util.getListActualProgress(task.getDateStart(), workLogList);
+        return listActualProgresses;
+    }
 
-	@GetMapping("/projects/{id}/listProjectExpectProgresses")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Double> listProjectExpectProgresses(@PathVariable("id") int id) {
-		Project project = projectService.findByProjectId(id);
-		List<Double> listProjectExpectProgresses =  Util.getListExpectProgress(project.getStartDate(), project.getDeadlineDate());
-		return listProjectExpectProgresses;
-	}
-	
-	@GetMapping("/projects/{id}/listProjectActualProgresses")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Double> getListProjectActualProgress(@PathVariable("id") int id) {
-		Project project = projectService.findByProjectId(id);
-		List<ProjectProgress> workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
-		List<Double> listProjectActualProgresses =  Util.getListActualProjectProgress(project.getStartDate(), workLogList);
-		return listProjectActualProgresses;
-	}
-	
+    @PostMapping("/tasks/{id}/addTaskProgress")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<?> addTaskProgress(@PathVariable("id") int id, @RequestBody TaskProgressDTO taskprogressDTO) {
+        TaskProgress taskProgress = new TaskProgress(taskprogressDTO.getDateLog(), taskprogressDTO.getProgress(), taskprogressDTO.getDetailLog());
+        Task task = taskService.findById(id);
+        taskProgress.setTaskId(task);
+        taskProgressService.createTaskProgress(taskProgress);
+        return new ResponseEntity<>(new ResponseMessage("Log Schedule Successfully!"), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/projects/{id}/projectProgresses")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<?> listProjectProgresses(@PathVariable("id") int id) {
+        List<ProjectProgress> workLogList = new ArrayList<>();
+        workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
+        if (workLogList.isEmpty()) {
+            return new ResponseEntity<>(new ResponseMessage("List Project Progress is empty!"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(workLogList, HttpStatus.OK);
+    }
+
+    @GetMapping("/projects/{id}/labelProjectFromListDate")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public List<String> listLabelProject(@PathVariable("id") int id) {
+        Project project = projectService.findByProjectId(id);
+        List<ProjectProgress> workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
+        List<Date> listDate;
+        if (workLogList.size() > 0) {
+            listDate = Util.getListDate(project.getStartDate(), project.getDeadlineDate(),
+                    workLogList.get(workLogList.size() - 1).getDateLog());
+        } else {
+            listDate = Util.getListDate(project.getStartDate(), project.getDeadlineDate(), new Date(0));
+        }
+        List<String> listLabelProjectFromListDate = Util.getLabelFromListDate(listDate);
+
+        return listLabelProjectFromListDate;
+    }
+
+    @GetMapping("/projects/{id}/listProjectExpectProgresses")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public List<Double> listProjectExpectProgresses(@PathVariable("id") int id) {
+        Project project = projectService.findByProjectId(id);
+        List<Double> listProjectExpectProgresses = Util.getListExpectProgress(project.getStartDate(), project.getDeadlineDate());
+        return listProjectExpectProgresses;
+    }
+
+    @GetMapping("/projects/{id}/listProjectActualProgresses")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+    public List<Double> getListProjectActualProgress(@PathVariable("id") int id) {
+        Project project = projectService.findByProjectId(id);
+        List<ProjectProgress> workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
+        List<Double> listProjectActualProgresses = Util.getListActualProjectProgress(project.getStartDate(), workLogList);
+        return listProjectActualProgresses;
+    }
+
 }
