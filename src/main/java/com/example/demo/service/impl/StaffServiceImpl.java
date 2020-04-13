@@ -21,6 +21,11 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override
+	public Staff findByName(String name) {
+		return staffRepository.findByName(name);
+	}
+
+	@Override
 	public List<Staff> findByUsername(String firstname) {
 		return null;
 	}

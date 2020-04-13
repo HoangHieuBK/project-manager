@@ -17,5 +17,6 @@ public interface StaffRepo extends JpaRepository<Staff, Integer> {
     
 	Boolean existsByName(String name);
 
+	Staff findByName(String name);
 
 }

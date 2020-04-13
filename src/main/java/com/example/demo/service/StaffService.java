@@ -16,6 +16,8 @@ public interface StaffService {
 
 	Staff save(Staff staff);
 
+	Staff findByName(String name);
+
 	void delete(int id);
 	
 	String getDerpatmentName(int id);

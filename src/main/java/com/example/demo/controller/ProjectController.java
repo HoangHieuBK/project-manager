@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.example.demo.service.StaffService;
 import com.example.demo.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,9 @@ public class ProjectController {
 
 	@Autowired
 	TaskService taskService;
+
+	@Autowired
+	StaffService staffService;
 
 	@GetMapping("/projects")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
@@ -187,6 +191,11 @@ public class ProjectController {
 		Project project = projectService.getProjecByiD(id).get();
 		if (project != null) {
 			task.setProjectId(project);
+		}
+
+		Staff _staff = staffService.findByName(taskDTO.getStaffName());
+		if(_staff != null) {
+			task.setStaffId(_staff);
 		}
 
 		List<Task> listBigTaskOfProject = projectService.getListBigTaskOfProject(id);
