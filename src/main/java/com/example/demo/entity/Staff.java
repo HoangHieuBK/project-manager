@@ -31,11 +31,19 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "staff")
 @JsonIgnoreProperties(value = { "staffProject" })
@@ -50,6 +58,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
     @NamedQuery(name = "Staff.findByDescription", query = "SELECT s FROM Staff s WHERE s.description = :description")})
 public class Staff implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -93,91 +102,5 @@ public class Staff implements Serializable {
     @JoinColumn(name = "account_id", referencedColumnName = "account_id")
     @ManyToOne(optional = false)
     private Account accountId;
-    
-    
-    
-	public Staff() {
-		super();
-	}
 
-
-	public Staff(String name, String gender, String possition, String skill, String telephone, String description) {
-		super();
-		this.name = name;
-		this.gender = gender;
-		this.possition = possition;
-		this.skill = skill;
-		this.telephone = telephone;
-		this.description = description;
-	}
-	
-	
-	public Integer getStaffId() {
-		return staffId;
-	}
-	public void setStaffId(Integer staffId) {
-		this.staffId = staffId;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	public String getPossition() {
-		return possition;
-	}
-	public void setPossition(String possition) {
-		this.possition = possition;
-	}
-	public String getSkill() {
-		return skill;
-	}
-	public void setSkill(String skill) {
-		this.skill = skill;
-	}
-	public String getTelephone() {
-		return telephone;
-	}
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public Collection<Project> getStaffProject() {
-		return staffProject;
-	}
-	public void setStaffProject(Collection<Project> staffProject) {
-		this.staffProject = staffProject;
-	}
-	public Collection<Task> getTask() {
-		return task;
-	}
-	public void setTask(Collection<Task> task) {
-		this.task = task;
-	}
-	public Department getDepartmentId() {
-		return departmentId;
-	}
-	public void setDepartmentId(Department departmentId) {
-		this.departmentId = departmentId;
-	}
-	public Account getAccountId() {
-		return accountId;
-	}
-	public void setAccountId(Account accountId) {
-		this.accountId = accountId;
-	}
-
-   
 }

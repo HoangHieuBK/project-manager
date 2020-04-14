@@ -48,11 +48,17 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@Builder
+@Data
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "project")
 @JsonIgnoreProperties(value = { "staffProject" })
@@ -68,6 +74,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 		@NamedQuery(name = "Project.findByProjectOutput", query = "SELECT p FROM Project p WHERE p.projectOutput = :projectOutput") })
 public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	@ToString.Include
+	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -115,146 +124,5 @@ public class Project implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
 	private Collection<Task> task;
-
-	public Project() {
-	}
-
-	public Project(Integer projectId) {
-		this.projectId = projectId;
-	}
-
-	public Project(String projectName, Date createDate, Date startDate, Date deadlineDate, Date finishDate) {
-		this.projectName = projectName;
-		this.createDate = createDate;
-		this.startDate = startDate;
-		this.deadlineDate = deadlineDate;
-		this.finishDate = finishDate;
-	}
-
-	public Project(String projectName, Date createDate, Date startDate, Date deadlineDate, String description,
-			String projectOutput) {
-		super();
-		this.projectName = projectName;
-		this.createDate = createDate;
-		this.startDate = startDate;
-		this.deadlineDate = deadlineDate;
-		this.description = description;
-		this.projectState = 0;
-		this.projectOutput = projectOutput;
-	}
-
-	public Collection<Staff> getStaffProject() {
-		return staffProject;
-	}
-
-	public void setStaffProject(Collection<Staff> staffProject) {
-		this.staffProject = staffProject;
-	}
-
-	public Integer getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
-	}
-
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getDeadlineDate() {
-		return deadlineDate;
-	}
-
-	public void setDeadlineDate(Date deadlineDate) {
-		this.deadlineDate = deadlineDate;
-	}
-
-	public Date getFinishDate() {
-		return finishDate;
-	}
-
-	public void setFinishDate(Date finishDate) {
-		this.finishDate = finishDate;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getProjectState() {
-		return projectState;
-	}
-
-	public void setProjectState(Integer projectState) {
-		this.projectState = projectState;
-	}
-
-	public String getProjectOutput() {
-		return projectOutput;
-	}
-
-	public void setProjectOutput(String projectOutput) {
-		this.projectOutput = projectOutput;
-	}
-
-	public Collection<Task> getTask() {
-		return task;
-	}
-
-	public void setTask(Collection<Task> task) {
-		this.task = task;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (projectId != null ? projectId.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof Project)) {
-			return false;
-		}
-		Project other = (Project) object;
-		if ((this.projectId == null && other.projectId != null)
-				|| (this.projectId != null && !this.projectId.equals(other.projectId))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "gdfgdfgdfg.Project[ projectId=" + projectId + " ]";
-	}
 
 }

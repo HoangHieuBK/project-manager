@@ -5,7 +5,15 @@ import java.util.Date;
 
 import com.example.demo.entity.Staff;
 import com.example.demo.entity.Task;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectDTO {
 
 	private Integer projectId;
@@ -21,136 +29,5 @@ public class ProjectDTO {
 	private Collection<String> task;
 	private Integer numberOfStaff;
 	private Integer numberOfTask;
-	public ProjectDTO() {
-		super();
-	}
 
-	public ProjectDTO(Integer projectId, String projectName, Date createDate, Date startDate, Date deadlineDate, Date finishDate,
-			String description, Integer projectState, String projectOutput) {
-		super();
-		this.projectId = projectId;
-		this.projectName = projectName;
-		this.createDate = createDate;
-		this.startDate = startDate;
-		this.deadlineDate = deadlineDate;
-		this.finishDate = finishDate;
-		this.description = description;
-		this.projectState = projectState;
-		this.projectOutput = projectOutput;
-	}
-
-	
-	public ProjectDTO(String projectName, Date createDate, Date startDate, Date deadlineDate) {
-		super();
-		this.projectName = projectName;
-		this.createDate = createDate;
-		this.startDate = startDate;
-		this.deadlineDate = deadlineDate;
-	}
-
-	public Integer getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
-	}
-
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getDeadlineDate() {
-		return deadlineDate;
-	}
-
-	public void setDeadlineDate(Date deadlineDate) {
-		this.deadlineDate = deadlineDate;
-	}
-
-	public Date getFinishDate() {
-		return finishDate;
-	}
-
-	public void setFinishDate(Date finishDate) {
-		this.finishDate = finishDate;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getProjectState() {
-		return projectState;
-	}
-
-	public void setProjectState(Integer projectState) {
-		this.projectState = projectState;
-	}
-
-	public String getProjectOutput() {
-		return projectOutput;
-	}
-
-	public void setProjectOutput(String projectOutput) {
-		this.projectOutput = projectOutput;
-	}
-
-	public Collection<String> getStaffsOfProject() {
-		return staffsOfProject;
-	}
-
-	public void setStaffsOfProject(Collection<String> staffsOfProject) {
-		this.staffsOfProject = staffsOfProject;
-	}
-
-	public Collection<String> getTask() {
-		return task;
-	}
-
-	public void setTask(Collection<String> task) {
-		this.task = task;
-	}
-
-	public Integer getNumberOfStaff() {
-		return numberOfStaff;
-	}
-
-	public void setNumberOfStaff(Integer numberOfStaff) {
-		this.numberOfStaff = numberOfStaff;
-	}
-
-	public Integer getNumberOfTask() {
-		return numberOfTask;
-	}
-
-	public void setNumberOfTask(Integer numberOfTask) {
-		this.numberOfTask = numberOfTask;
-	}
-
-	
 }

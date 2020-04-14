@@ -59,7 +59,13 @@ public class TimeWorkController {
             return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
                     HttpStatus.BAD_REQUEST);
         }
-        Events event = new Events(eventDTO.getTitle(), eventDTO.getDescription(), eventDTO.getStart(), eventDTO.getEnd());
+        Events event = Events.builder()
+                      .title(eventDTO.getTitle())
+                      .description(eventDTO.getDescription())
+                      .start(eventDTO.getStart())
+                      .end(eventDTO.getEnd())
+                      .build();
+
         Staff staff = staffService.findOne(id);
         event.setStaffId(staff);
         eventsService.save(event);

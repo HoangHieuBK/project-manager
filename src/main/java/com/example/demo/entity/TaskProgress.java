@@ -15,10 +15,18 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "progress_task")
 public class TaskProgress implements Serializable {
@@ -47,63 +55,4 @@ public class TaskProgress implements Serializable {
 	@ManyToOne(optional = false)
 	private Task taskId;
 
-	public TaskProgress() {
-		super();
-	}
-
-	public TaskProgress(Date dateLog, int progress, String detailLog) {
-		super();
-		this.dateLog = dateLog;
-		this.progress = progress;
-		this.detailLog = detailLog;
-	}
-
-	public TaskProgress(Long progressId, Date dateLog, int progress, String detailLog, Task taskId) {
-		super();
-		this.progressId = progressId;
-		this.dateLog = dateLog;
-		this.progress = progress;
-		this.detailLog = detailLog;
-		this.taskId = taskId;
-	}
-
-	public Long getProgressId() {
-		return progressId;
-	}
-
-	public void setProgressId(Long progressId) {
-		this.progressId = progressId;
-	}
-
-	public Date getDateLog() {
-		return dateLog;
-	}
-
-	public void setDateLog(Date dateLog) {
-		this.dateLog = dateLog;
-	}
-
-	public int getProgress() {
-		return progress;
-	}
-
-	public void setProgress(int progress) {
-		this.progress = progress;
-	}
-
-	public String getDetailLog() {
-		return detailLog;
-	}
-
-	public void setDetailLog(String detailLog) {
-		this.detailLog = detailLog;
-	}
-
-	public Task getTaskId() {
-		return taskId;
-	}
-
-	public void setTaskId(Task taskId) {
-		this.taskId = taskId;
-	}
 }

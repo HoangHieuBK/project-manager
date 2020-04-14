@@ -71,8 +71,11 @@ public class DepartmentController {
 					HttpStatus.BAD_REQUEST);
 		}
 
-		Department department = new Department(departmentDTO.getDepartmentName(), departmentDTO.getManagerName(),
-				departmentDTO.getDescription());
+		Department department = Department.builder()
+				      			.departmentName(departmentDTO.getDepartmentName())
+								.managerName(departmentDTO.getManagerName())
+				    			.discription(departmentDTO.getDescription())
+								.build();
 
 		Set<Staff> listStaff = new HashSet<>();
 		department.setStaffCollection(listStaff);

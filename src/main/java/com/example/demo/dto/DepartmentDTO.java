@@ -1,5 +1,14 @@
 package com.example.demo.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DepartmentDTO {
 
 	private int departmentId;
@@ -10,49 +19,4 @@ public class DepartmentDTO {
 	
 	private String description;
 
-	public DepartmentDTO() {
-		super();
-	}
-
-	public DepartmentDTO(int departmentId, String departmentName, String managerName, String description) {
-		super();
-		this.departmentId = departmentId;
-		this.departmentName = departmentName;
-		this.managerName = managerName;
-		this.description = description;
-	}
-
-	public int getDepartmentId() {
-		return departmentId;
-	}
-
-	public void setDepartmentId(int departmentId) {
-		this.departmentId = departmentId;
-	}
-
-	public String getDepartmentName() {
-		return departmentName;
-	}
-
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
-	}
-
-	public String getManagerName() {
-		return managerName;
-	}
-
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	
 }

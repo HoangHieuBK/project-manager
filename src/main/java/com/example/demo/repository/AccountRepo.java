@@ -19,6 +19,6 @@ public interface AccountRepo extends JpaRepository<Account, Integer>{
 	Boolean existsByUsername(String username);
 	Boolean existsByEmail(String email);
 	
-	@Query("select r from Role r where r.roleId = :roleId")
+	@Query(value = "select r from Role r where r.roleId = :roleId")
 	Role getRole(@Param("roleId") int roleId);
 }

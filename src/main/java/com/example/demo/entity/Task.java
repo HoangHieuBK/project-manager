@@ -38,12 +38,19 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "task")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -51,6 +58,8 @@ public class Task implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@ToString.Include
+	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -116,173 +125,5 @@ public class Task implements Serializable {
 	@JoinTable(name = "task_relation", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "previous_task_id") })
 	private Set<Task> previousTask = new HashSet<>();
-
-	public Task() {
-	}
-
-	public Task(Integer taskId) {
-		this.taskId = taskId;
-	}
-
-	public Task(Integer taskId, String taskName, String nameCreate, Date dateCreate, Date deadlineDate,
-			String discription) {
-		this.taskId = taskId;
-		this.taskName = taskName;
-		this.nameCreate = nameCreate;
-		this.dateCreate = dateCreate;
-		this.deadlineDate = deadlineDate;
-		this.discription = discription;
-	}
-
-	public Task(String taskName, String nameCreate, Date dateCreate, Date dateStart, Date deadlineDate,
-			String discription, String taskOutput) {
-		super();
-		this.taskName = taskName;
-		this.nameCreate = nameCreate;
-		this.dateCreate = dateCreate;
-		this.dateStart = dateStart;
-		this.deadlineDate = deadlineDate;
-		this.taskState = 0;
-		this.discription = discription;
-		this.taskOutput = taskOutput;
-	}
-
-	public Date getDateStart() {
-		return dateStart;
-	}
-
-	public void setDateStart(Date dateStart) {
-		this.dateStart = dateStart;
-	}
-
-	public Set<Task> getPreviousTask() {
-		return previousTask;
-	}
-
-	public void setPreviousTask(Set<Task> previousTask) {
-		this.previousTask = previousTask;
-	}
-
-	public Integer getTaskId() {
-		return taskId;
-	}
-
-	public void setTaskId(Integer taskId) {
-		this.taskId = taskId;
-	}
-
-	public Integer getTaskIdparent() {
-		return taskIdparent;
-	}
-
-	public void setTaskIdparent(Integer taskIdparent) {
-		this.taskIdparent = taskIdparent;
-	}
-
-	public String getTaskName() {
-		return taskName;
-	}
-
-	public void setTaskName(String taskName) {
-		this.taskName = taskName;
-	}
-
-	public String getNameCreate() {
-		return nameCreate;
-	}
-
-	public void setNameCreate(String nameCreate) {
-		this.nameCreate = nameCreate;
-	}
-
-	public Date getDateCreate() {
-		return dateCreate;
-	}
-
-	public void setDateCreate(Date dateCreate) {
-		this.dateCreate = dateCreate;
-	}
-
-	public Date getDeadlineDate() {
-		return deadlineDate;
-	}
-
-	public void setDeadlineDate(Date deadlineDate) {
-		this.deadlineDate = deadlineDate;
-	}
-
-	public Date getFinishDate() {
-		return finishDate;
-	}
-
-	public void setFinishDate(Date finishDate) {
-		this.finishDate = finishDate;
-	}
-
-	public Integer getTaskState() {
-		return taskState;
-	}
-
-	public void setTaskState(Integer taskState) {
-		this.taskState = taskState;
-	}
-
-	public String getDiscription() {
-		return discription;
-	}
-
-	public void setDiscription(String discription) {
-		this.discription = discription;
-	}
-
-	public String getTaskOutput() {
-		return taskOutput;
-	}
-
-	public void setTaskOutput(String taskOutput) {
-		this.taskOutput = taskOutput;
-	}
-
-	public Project getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(Project projectId) {
-		this.projectId = projectId;
-	}
-
-	public Staff getStaffId() {
-		return staffId;
-	}
-
-	public void setStaffId(Staff staffId) {
-		this.staffId = staffId;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (taskId != null ? taskId.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof Task)) {
-			return false;
-		}
-		Task other = (Task) object;
-		if ((this.taskId == null && other.taskId != null)
-				|| (this.taskId != null && !this.taskId.equals(other.taskId))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Task[ taskId=" + taskId + " ]";
-	}
 
 }

@@ -108,8 +108,12 @@ public class AccountController {
 		}
 
 		// Creating user's account
-		Account account = new Account(signUpRequest.getAccountName(), signUpRequest.getUsername(),
-				signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
+		Account account = Account.builder()
+				          .accountName(signUpRequest.getAccountName())
+				          .username(signUpRequest.getUsername())
+				          .email(signUpRequest.getEmail())
+				          .password(encoder.encode(signUpRequest.getPassword()))
+						  .build();
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();

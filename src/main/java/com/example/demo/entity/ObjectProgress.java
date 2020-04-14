@@ -11,8 +11,12 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Builder
+@Data
 @MappedSuperclass
 public abstract class ObjectProgress {
 
@@ -34,46 +38,6 @@ public abstract class ObjectProgress {
 	private String detailLog;
 
 	private int confirm;
-	
-	
-	public Long getProgressId() {
-		return progressId;
-	}
 
-	public void setProgressId(Long progressId) {
-		this.progressId = progressId;
-	}
-
-	public Date getDateLog() {
-		return dateLog;
-	}
-
-	public void setDateLog(Date dateLog) {
-		this.dateLog = dateLog;
-	}
-
-	public int getProgress() {
-		return progress;
-	}
-
-	public void setProgress(int progress) {
-		this.progress = progress;
-	}
-
-	public String getDetailLog() {
-		return detailLog;
-	}
-
-	public void setDetailLog(String detailLog) {
-		this.detailLog = detailLog;
-	}
-
-	public int getConfirm() {
-		return confirm;
-	}
-
-	public void setConfirm(int confirm) {
-		this.confirm = confirm;
-	}
 
 }

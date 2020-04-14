@@ -18,6 +18,11 @@ package com.example.demo.entity;
  * and open the template in the editor.
  */
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -27,6 +32,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "staff_project")
 public class StaffProject implements Serializable {
@@ -44,36 +53,5 @@ public class StaffProject implements Serializable {
 	@Basic(optional = false)
 	@Column(name = "project_id")
 	private int project_id;
-
-	public Integer getStaffProjectId() {
-		return staffProjectId;
-	}
-
-	public void setStaffProjectId(Integer staffProjectId) {
-		this.staffProjectId = staffProjectId;
-	}
-
-	public int getStaffId() {
-		return staffId;
-	}
-
-	public void setStaffId(int staffId) {
-		this.staffId = staffId;
-	}
-
-	public int getProject_id() {
-		return project_id;
-	}
-
-	public void setProject_id(int project_id) {
-		this.project_id = project_id;
-	}
-
-	public StaffProject(Integer staffProjectId, int staffId, int project_id) {
-		super();
-		this.staffProjectId = staffProjectId;
-		this.staffId = staffId;
-		this.project_id = project_id;
-	}
 
 }

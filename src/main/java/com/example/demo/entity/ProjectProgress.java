@@ -15,10 +15,16 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Builder
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "progress_project")
 public class ProjectProgress implements Serializable{
@@ -46,59 +52,5 @@ public class ProjectProgress implements Serializable{
   @JoinColumn(name = "project_id", referencedColumnName = "project_id")
   @ManyToOne(optional = false)
   private Project projectId;
-
-  public ProjectProgress() {
-    super();
-  }
-
-  public ProjectProgress(Long progressId, Date dateLog, int progress, String detailLog,
-      Project projectId) {
-    super();
-    this.progressId = progressId;
-    this.dateLog = dateLog;
-    this.progress = progress;
-    this.detailLog = detailLog;
-    this.projectId = projectId;
-  }
-
-  public Long getProgressId() {
-    return progressId;
-  }
-
-  public void setProgressId(Long progressId) {
-    this.progressId = progressId;
-  }
-
-  public Date getDateLog() {
-    return dateLog;
-  }
-
-  public void setDateLog(Date dateLog) {
-    this.dateLog = dateLog;
-  }
-
-  public int getProgress() {
-    return progress;
-  }
-
-  public void setProgress(int progress) {
-    this.progress = progress;
-  }
-
-  public String getDetailLog() {
-    return detailLog;
-  }
-
-  public void setDetailLog(String detailLog) {
-    this.detailLog = detailLog;
-  }
-
-  public Project getProjectId() {
-    return projectId;
-  }
-
-  public void setProjectId(Project projectId) {
-    this.projectId = projectId;
-  }
 
 }

@@ -13,18 +13,27 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "event")
 public class Events {
 
+	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@ToString.Include
 	@Column(name = "title")
 	private String title;
 
@@ -46,74 +55,5 @@ public class Events {
 	@JsonIgnore
 	private Staff staffId;
 
-	public Events(Long id, String title, String description, Date start, Date end, Staff staffId) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.start = start;
-		this.end = end;
-		this.staffId = staffId;
-	}
-
-	public Events(String title, String description, Date start, Date end) {
-		super();
-		this.title = title;
-		this.description = description;
-		this.start = start;
-		this.end = end;
-	}
-
-	public Events() {
-		super();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Date getStart() {
-		return start;
-	}
-
-	public void setStart(Date start) {
-		this.start = start;
-	}
-
-	public Date getEnd() {
-		return end;
-	}
-
-	public void setEnd(Date end) {
-		this.end = end;
-	}
-
-	public Staff getStaffId() {
-		return staffId;
-	}
-
-	public void setStaffId(Staff staffId) {
-		this.staffId = staffId;
-	}
 
 }

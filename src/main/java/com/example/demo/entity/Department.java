@@ -30,11 +30,18 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 /**
  *
  */
 @Entity
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "department")
 @NamedQueries({
     @NamedQuery(name = "Department.findAll", query = "SELECT d FROM Department d"),
@@ -44,8 +51,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
     @NamedQuery(name = "Department.findByDiscription", query = "SELECT d FROM Department d WHERE d.discription = :discription")})
 public class Department implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Include
+    @EqualsAndHashCode.Include
     @Basic(optional = false)
     @Column(name = "department_id")
     private Integer departmentId;
@@ -53,7 +63,6 @@ public class Department implements Serializable {
     @Basic(optional = false)
     @NotBlank
     @Column(name = "department_name")
-
     private String departmentName;
 
     @Basic(optional = false)
@@ -81,82 +90,5 @@ public class Department implements Serializable {
 		this.check = check;
 	}
 
-	public Department() {
-    }
-
-    public Department(Integer departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public Department(String departmentName, String managerName, String discription) {
-        this.departmentName = departmentName;
-        this.managerName = managerName;
-        this.discription = discription;
-    }
-
-    public Integer getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Integer departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-
-    public String getManagerName() {
-        return managerName;
-    }
-
-    public void setManagerName(String managerName) {
-        this.managerName = managerName;
-    }
-
-    public String getDiscription() {
-        return discription;
-    }
-
-    public void setDiscription(String discription) {
-        this.discription = discription;
-    }
-
-    public Collection<Staff> getStaffCollection() {
-        return staffCollection;
-    }
-
-    public void setStaffCollection(Collection<Staff> staffCollection) {
-        this.staffCollection = staffCollection;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (departmentId != null ? departmentId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Department)) {
-            return false;
-        }
-        Department other = (Department) object;
-        if ((this.departmentId == null && other.departmentId != null) || (this.departmentId != null && !this.departmentId.equals(other.departmentId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "gdfgdfgdfg.Department[ departmentId=" + departmentId + " ]";
-    }
     
 }
