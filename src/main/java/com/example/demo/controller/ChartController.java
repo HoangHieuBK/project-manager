@@ -99,7 +99,12 @@ public class ChartController {
     @PostMapping("/tasks/{id}/addTaskProgress")
     @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> addTaskProgress(@PathVariable("id") int id, @RequestBody TaskProgressDTO taskprogressDTO) {
-        TaskProgress taskProgress = new TaskProgress(taskprogressDTO.getDateLog(), taskprogressDTO.getProgress(), taskprogressDTO.getDetailLog());
+        TaskProgress taskProgress = TaskProgress.builder()
+                                    .dateLog(taskprogressDTO.getDateLog())
+                                    .progress(taskprogressDTO.getProgress())
+                                    .detailLog(taskprogressDTO.getDetailLog())
+                                    .build();
+
         Task task = taskService.findById(id);
         taskProgress.setTaskId(task);
         taskProgressService.createTaskProgress(taskProgress);

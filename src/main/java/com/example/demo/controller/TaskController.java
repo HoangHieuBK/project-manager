@@ -60,8 +60,16 @@ public class TaskController {
 			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
 					HttpStatus.BAD_REQUEST);
 		}
-		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
-				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());
+
+		Task task = Task.builder()
+					.taskName(taskDTO.getTaskName())
+					.nameCreate(taskDTO.getNameCreate())
+					.dateCreate(taskDTO.getDateCreate())
+					.dateStart(taskDTO.getDateStart())
+					.deadlineDate(taskDTO.getDeadlineDate())
+					.discription(taskDTO.getDiscription())
+					.taskOutput(taskDTO.getTaskOutput())
+					.build();
 
 		Project project = projectService.getProjecByiD(id).get();
 		if (project != null) {
@@ -88,8 +96,16 @@ public class TaskController {
 					HttpStatus.BAD_REQUEST);
 		}
 		Task parentTask = taskService.findById(id);
-		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
-				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());
+		Task task = Task.builder()
+				.taskName(taskDTO.getTaskName())
+				.nameCreate(taskDTO.getNameCreate())
+				.dateCreate(taskDTO.getDateCreate())
+				.dateStart(taskDTO.getDateStart())
+				.deadlineDate(taskDTO.getDeadlineDate())
+				.discription(taskDTO.getDiscription())
+				.taskOutput(taskDTO.getTaskOutput())
+				.build();
+
 		if (parentTask != null) {
 			task.setProjectId(parentTask.getProjectId());
 			task.setTaskIdparent(parentTask.getTaskId());

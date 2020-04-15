@@ -18,5 +18,5 @@ public class TaskProgressDTO {
 	private int progress;
 	private String detailLog;
 	private Task task;
-	
+
 }

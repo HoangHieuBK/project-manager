@@ -28,10 +28,6 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account saveAccount(Account account) {
 		account.setPassword(account.getPassword());
-//		Role accountRole = roleRepo.findByRoleName("ADMIN");
-//		Role accountRole = accountRepo.getRole(account.getRole().getRoleId());
-//		System.out.println(accountRole.getRoleName() + "dung null nhe !");
-//		account.setRole(accountRole);
 		if (checkEmailExistInDB(account)) {
 			return accountRepo.save(account);
 		}

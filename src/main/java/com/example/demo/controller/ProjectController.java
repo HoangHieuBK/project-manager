@@ -64,9 +64,19 @@ public class ProjectController {
 		Optional<Project> projectData = projectService.getProjecByiD(id);
 		if (projectData.isPresent()) {
 			Project project = projectData.get();
-			ProjectDTO projectDTO = new ProjectDTO(project.getProjectId(), project.getProjectName(),
-					project.getCreateDate(), project.getStartDate(), project.getDeadlineDate(), project.getFinishDate(),
-					project.getDescription(), project.getProjectState(), project.getProjectOutput());
+
+			ProjectDTO projectDTO = ProjectDTO.builder()
+									.projectId(project.getProjectId())
+									.projectName(project.getProjectName())
+									.createDate(project.getCreateDate())
+									.startDate(project.getStartDate())
+									.deadlineDate(project.getDeadlineDate())
+									.finishDate(project.getFinishDate())
+									.description(project.getDescription())
+					 				.projectState(project.getProjectState())
+									.projectOutput(project.getProjectOutput())
+									.build();
+
 			int numOfStaff = project.getStaffProject().size();
 			projectDTO.setNumberOfStaff(numOfStaff);
 			int numOfTask = project.getTask().size();
@@ -89,9 +99,14 @@ public class ProjectController {
 			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
 					HttpStatus.BAD_REQUEST);
 		}
-		Project project = new Project(projectDTO.getProjectName(), projectDTO.getCreateDate(),
-				projectDTO.getStartDate(), projectDTO.getDeadlineDate(), projectDTO.getDescription(),
-				projectDTO.getProjectOutput());
+		Project project = Project.builder()
+						  .projectName(projectDTO.getProjectName())
+				   	      .createDate(projectDTO.getCreateDate())
+						  .startDate(projectDTO.getStartDate())
+						  .deadlineDate(projectDTO.getDeadlineDate())
+						  .description(projectDTO.getDescription())
+						  .projectOutput(projectDTO.getProjectOutput())
+						  .build();
 
 		projectService.saveProject(project);
 		return new ResponseEntity<>(new ResponseMessage("Create Project Successfully!"), HttpStatus.OK);
@@ -142,9 +157,18 @@ public class ProjectController {
 		List<StaffDTO> listStaffDTO = new ArrayList<StaffDTO>();
 
 		listStaffOfProject.forEach(staff -> {
-			StaffDTO _staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
-					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
-					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
+			StaffDTO _staffDTO = StaffDTO.builder()
+								.staffId(staff.getStaffId())
+								.name(staff.getName())
+								.gender(staff.getGender())
+								.possition(staff.getPossition())
+								.skill(staff.getSkill())
+								.telephone(staff.getTelephone())
+								.description(staff.getDescription())
+								.departmentName(staff.getDepartmentId().getDepartmentName())
+								.accountName(staff.getAccountId().getAccountName())
+								.build();
+
 			listStaffDTO.add(_staffDTO);
 		});
 		return listStaffDTO;
@@ -157,9 +181,20 @@ public class ProjectController {
 		List<TaskDTO> listTaskDTO = new ArrayList<>();
 
 		listTaskOfProject.forEach(task -> {
-			TaskDTO _taskDTO = new TaskDTO(task.getTaskId(), task.getTaskIdparent(), task.getTaskName(),
-					task.getNameCreate(), task.getDateCreate(), task.getDateStart(), task.getDeadlineDate(),
-					task.getTaskState(), task.getDiscription(), task.getTaskOutput());
+
+			TaskDTO _taskDTO = TaskDTO.builder()
+								.taskId(task.getTaskId())
+								.taskIdParent(task.getTaskIdparent())
+								.taskName(task.getTaskName())
+								.nameCreate(task.getNameCreate())
+								.dateCreate(task.getDateCreate())
+								.dateStart(task.getDateStart())
+								.deadlineDate(task.getDeadlineDate())
+								.taskState(task.getTaskState())
+								.discription(task.getDiscription())
+								.taskOutput(task.getTaskOutput())
+								.build();
+
 			if (task.getStaffId() != null) {
 				_taskDTO.setStaffName(task.getStaffId().getName());
 				_taskDTO.setStaffId(task.getStaffId().getStaffId());
@@ -185,8 +220,15 @@ public class ProjectController {
 					HttpStatus.BAD_REQUEST);
 		}
 
-		Task task = new Task(taskDTO.getTaskName(), taskDTO.getNameCreate(), taskDTO.getDateCreate(),
-				taskDTO.getDateStart(), taskDTO.getDeadlineDate(), taskDTO.getDiscription(), taskDTO.getTaskOutput());
+		Task task = Task.builder()
+					.taskName(taskDTO.getTaskName())
+					.nameCreate(taskDTO.getNameCreate())
+					.dateCreate(taskDTO.getDateCreate())
+					.dateStart(taskDTO.getDateStart())
+					.deadlineDate(taskDTO.getDeadlineDate())
+					.discription(taskDTO.getDiscription())
+					.taskOutput(taskDTO.getTaskOutput())
+					.build();
 
 		Project project = projectService.getProjecByiD(id).get();
 		if (project != null) {
@@ -214,9 +256,18 @@ public class ProjectController {
 		List<StaffDTO> listStaffDTO = new ArrayList<StaffDTO>();
 
 		listStaffNotInProject.forEach(staff -> {
-			StaffDTO _staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
-					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
-					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
+
+			StaffDTO _staffDTO = StaffDTO.builder()
+					.staffId(staff.getStaffId())
+					.name(staff.getName())
+					.gender(staff.getGender())
+					.possition(staff.getPossition())
+					.skill(staff.getSkill())
+					.telephone(staff.getTelephone())
+					.description(staff.getDescription())
+					.departmentName(staff.getDepartmentId().getDepartmentName())
+					.accountName(staff.getAccountId().getAccountName())
+					.build();
 			listStaffDTO.add(_staffDTO);
 		});
 		return listStaffDTO;

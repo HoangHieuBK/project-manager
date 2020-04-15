@@ -55,9 +55,18 @@ public class StaffController {
 		List<StaffDTO> listStaffDTO = new ArrayList<StaffDTO>();
 
 		listStaff.forEach(staff -> {
-			StaffDTO _staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
-					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
-					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
+			StaffDTO _staffDTO = StaffDTO.builder()
+					.staffId(staff.getStaffId())
+					.name(staff.getName())
+					.gender(staff.getGender())
+					.possition(staff.getPossition())
+					.skill(staff.getSkill())
+					.telephone(staff.getTelephone())
+					.description(staff.getDescription())
+					.departmentName(staff.getDepartmentId().getDepartmentName())
+					.accountName(staff.getAccountId().getAccountName())
+					.build();
+
 			listStaffDTO.add(_staffDTO);
 		});
 		return listStaffDTO;
@@ -68,11 +77,19 @@ public class StaffController {
 	public ResponseEntity<?> detail(@PathVariable int id) {
 		Staff staff = staffService.findOne(id);
 		if (staff != null) {
-			StaffDTO staffDTO = new StaffDTO(staff.getStaffId(), staff.getName(), staff.getGender(),
-					staff.getPossition(), staff.getSkill(), staff.getTelephone(), staff.getDescription(),
-					staff.getDepartmentId().getDepartmentName(), staff.getAccountId().getAccountName());
-			staffDTO.setEmail(staff.getAccountId().getEmail());
-			staffDTO.setManagerName(staff.getDepartmentId().getManagerName());
+			StaffDTO staffDTO = StaffDTO.builder()
+					.staffId(staff.getStaffId())
+					.name(staff.getName())
+					.gender(staff.getGender())
+					.possition(staff.getPossition())
+					.skill(staff.getSkill())
+					.telephone(staff.getTelephone())
+					.description(staff.getDescription())
+					.departmentName(staff.getDepartmentId().getDepartmentName())
+					.accountName(staff.getAccountId().getAccountName())
+					.email(staff.getAccountId().getEmail())
+					.managerName(staff.getDepartmentId().getManagerName())
+					.build();
 
 			Set<Role> roles = staff.getAccountId().getRoles();
 			Set<String> strRoles = new HashSet<String>();
@@ -106,8 +123,14 @@ public class StaffController {
 			return new ResponseEntity<>(new ResponseMessage("Fail -> Staff is already taken!"), HttpStatus.BAD_REQUEST);
 		}
 
-		Staff staff = new Staff(staffDTO.getName(), staffDTO.getGender(), staffDTO.getPossition(), staffDTO.getSkill(),
-				staffDTO.getTelephone(), staffDTO.getDescription());
+		Staff staff = Staff.builder()
+					  .name(staffDTO.getName())
+					  .gender(staffDTO.getGender())
+				      .possition(staffDTO.getPossition())
+				  	  .skill(staffDTO.getSkill())
+					  .telephone(staffDTO.getTelephone())
+					  .description(staffDTO.getDescription())
+					  .build();
 
 		Optional<Department> objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName());
 		if(!objDepart.isPresent()){
@@ -174,9 +197,19 @@ public class StaffController {
 		List<TaskDTO> listTaskDTO = new ArrayList<>();
 
 		listTaskOfStaff.forEach(task -> {
-			TaskDTO _taskDTO = new TaskDTO(task.getTaskId(), task.getTaskIdparent(), task.getTaskName(),
-					task.getNameCreate(), task.getDateCreate(), task.getDateStart(), task.getDeadlineDate(),
-					task.getTaskState(), task.getDiscription(), task.getTaskOutput());
+			TaskDTO _taskDTO = TaskDTO.builder()
+								.taskId(task.getTaskId())
+								.taskIdParent(task.getTaskIdparent())
+								.taskName(task.getTaskName())
+								.nameCreate(task.getNameCreate())
+								.dateCreate(task.getDateCreate())
+								.dateStart(task.getDateStart())
+								.deadlineDate(task.getDeadlineDate())
+								.taskState(task.getTaskState())
+								.discription(task.getDiscription())
+								.taskOutput(task.getTaskOutput())
+								.build();
+
 			if (task.getStaffId() != null) {
 				_taskDTO.setStaffName(task.getStaffId().getName());
 				_taskDTO.setStaffId(task.getStaffId().getStaffId());
