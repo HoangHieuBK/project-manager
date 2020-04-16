@@ -89,7 +89,7 @@ public class ProjectController {
 	}
 
 	@PostMapping("/projects/add")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> addProject(@RequestBody ProjectDTO projectDTO) {
 		if (projectService.existByProjectName(projectDTO.getProjectName())) {
 			return new ResponseEntity<>(new ResponseMessage("Fail -> Project is already existed!"),
@@ -113,7 +113,7 @@ public class ProjectController {
 	}
 
 	@PutMapping("/projects/edit/{id}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> editProject(@PathVariable("id") int id, @RequestBody ProjectDTO projectDTO) {
 
 		if (projectDTO.getDeadlineDate().before(projectDTO.getStartDate())) {
@@ -142,7 +142,7 @@ public class ProjectController {
 	}
 
 	@DeleteMapping("/projects/delete/{id}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteProject(@PathVariable int id) {
 		System.out.println("Delete project with ID = " + id + "...");
 		projectService.deleteProjectById(id);
@@ -212,7 +212,7 @@ public class ProjectController {
 	}
 
 	@PostMapping(value = "projects/{id}/addTask")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> addTaskToProject(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
 
 		if (Util.checkEndDateBeforeStartDate(taskDTO.getDateStart(), taskDTO.getDeadlineDate())) {
@@ -274,14 +274,14 @@ public class ProjectController {
 	}
 
 	@PostMapping("/projects/{id}/staff/add/{idStaff}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> addStaffInproject(@PathVariable int id, @PathVariable int idStaff) {
 		projectService.addStaffInProject(id, idStaff);
 		return new ResponseEntity<>(new ResponseMessage("Staff has been added into project!"), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/projects/{id}/staff/{idStaff}/delete")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteStaffInProject(@PathVariable int id, @PathVariable int idStaff) {
 		projectService.deleteStaffIdInProject(idStaff, id);
 		return new ResponseEntity<>(new ResponseMessage("Staff has been deleted from project!"), HttpStatus.OK);

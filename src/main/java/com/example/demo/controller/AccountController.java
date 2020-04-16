@@ -84,7 +84,6 @@ public class AccountController {
 					break;
 				}
 			});
-			
 			signUpResponse.setRole(strRoles);
 			return new ResponseEntity<>(signUpResponse, HttpStatus.OK);
 			
@@ -95,7 +94,7 @@ public class AccountController {
 
 	// them 1 account
 	@PostMapping("/accounts/add")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> add(@Valid @RequestBody SignUpForm signUpRequest) {
 		if (accountRepo.existsByUsername(signUpRequest.getUsername())) {
 			return new ResponseEntity<>(new ResponseMessage("Fail -> username is already taken!"),

@@ -53,7 +53,7 @@ public class TaskController {
 	TaskProgressService taskProgressService;
 
 	@PostMapping(value = "projects/{id}/staff/{idstaff}/addTask")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> addTaskToStaff(@PathVariable("id") int id, @PathVariable("idstaff") int idstaff,
 			@RequestBody TaskDTO taskDTO) {
 		if (taskDTO.getDeadlineDate().before(taskDTO.getDateStart())) {
@@ -89,7 +89,7 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "/tasks/{id}/addsubtask")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> addSubTask(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
 		if (taskDTO.getDeadlineDate().before(taskDTO.getDateStart())) {
 			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
@@ -127,7 +127,7 @@ public class TaskController {
 	}
 
 	@DeleteMapping(value = "projects/{id}/task/delete/{idtask}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteTask(@PathVariable("id") int id, @PathVariable("idtask") int idtask) {
 		List<Task> listTaskOfProject = new ArrayList<Task>();
 		listTaskOfProject = projectService.getListTaskOfProject(id);
@@ -145,7 +145,7 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "staffs/{idstaff}/tasks/{taskId}/assign")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> assignStaffForTask(@PathVariable("idstaff") int idstaff,
 			@PathVariable("taskId") int taskId) {
 		Task task = taskService.findById(taskId);
