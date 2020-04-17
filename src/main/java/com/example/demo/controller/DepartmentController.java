@@ -58,9 +58,11 @@ public class DepartmentController {
 			Department department = departmentData.get();
 
 			return new ResponseEntity<>(department, HttpStatus.OK);
-		} else {
+		}
+		else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+
 	}
 
 	@PostMapping("/departments/add")
