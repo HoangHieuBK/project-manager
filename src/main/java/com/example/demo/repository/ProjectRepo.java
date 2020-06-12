@@ -24,8 +24,9 @@ public interface ProjectRepo extends JpaRepository<Project, Integer> {
 
 	@Query("select s from Staff s inner join s.staffProject sp  where sp.projectId= :projectId")
 	List<Staff> fetchStaff(@Param("projectId") int projectId);
-	
-	@Query("select s from Staff s left join s.staffProject sp  where sp.projectId <> :projectId or s.staffId not in (select staffId from StaffProject)")
+
+	@Query("select s from Staff s where s.staffId not in (" +
+			"select sp.staffId from StaffProject sp where sp.project_id= :projectId)")
 	List<Staff> getListStaffNotInproject(@Param("projectId") int projectId);
 	
 	@Modifying

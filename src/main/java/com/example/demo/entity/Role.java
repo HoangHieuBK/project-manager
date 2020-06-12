@@ -58,5 +58,4 @@ public class Role implements Serializable {
     @Column(name = "role_name")
     private RoleName roleName;
 
-    
 }

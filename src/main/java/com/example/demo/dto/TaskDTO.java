@@ -32,6 +32,6 @@ public class TaskDTO {
 	private Project project;
 	private Integer staffId;
 	private String staffName;
-	private Set<Task> previousTask = new HashSet<>();
+	private Set<String> previousTask = new HashSet<>();
 
 }

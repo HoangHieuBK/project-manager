@@ -9,7 +9,7 @@ public interface ProjectProgressService {
 
 	public ProjectProgress findByProjectIdAndDateLog(Integer projectId, Date dateLog);
 
-	public Date getLastDateOfProgjectProgress(Integer projectId);
+	public Date getLastDateOfProjectProgress(Integer projectId);
 
 	public void save(ProjectProgress projectProgress);
 

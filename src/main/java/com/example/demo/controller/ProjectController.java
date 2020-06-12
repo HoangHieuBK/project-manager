@@ -112,6 +112,8 @@ public class ProjectController {
 		return new ResponseEntity<>(new ResponseMessage("Create Project Successfully!"), HttpStatus.OK);
 	}
 
+
+
 	@PutMapping("/projects/edit/{id}")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> editProject(@PathVariable("id") int id, @RequestBody ProjectDTO projectDTO) {
@@ -204,14 +206,7 @@ public class ProjectController {
 		return listTaskDTO;
 	}
 
-	@GetMapping(value = "/projects/{id}/previousTasks")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
-	public List<Task> getPreviousTaskInProject(@PathVariable int id) {
-		List<Task> listPreviousTaskOfProject = projectService.getListBigTaskOfProject(id);
-		return listPreviousTaskOfProject;
-	}
-
-	@PostMapping(value = "projects/{id}/addTask")
+	@PostMapping(value = "/projects/{id}/addTask")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> addTaskToProject(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
 
@@ -240,14 +235,21 @@ public class ProjectController {
 			task.setStaffId(_staff);
 		}
 
-		List<Task> listBigTaskOfProject = projectService.getListBigTaskOfProject(id);
+        Set<String> listIdOfPreviousTask= taskDTO.getPreviousTask();
+		Set<Task> listPreviousTaskOfProject = new HashSet<>();
 
-		Set<Task> listPreviousTaskOfProject = new HashSet<Task>(listBigTaskOfProject);
+		listIdOfPreviousTask.forEach(taskName ->{
+			Task previousTask = taskService.findByTaskName(taskName);
+			if (previousTask != null){
+				listPreviousTaskOfProject.add(previousTask);
+			}
+		});
 		task.setPreviousTask(listPreviousTaskOfProject);
 
 		taskService.saveTask(task);
 		return new ResponseEntity<>(new ResponseMessage("Create Task Successfully!"), HttpStatus.OK);
 	}
+
 
 	@GetMapping(value = "/projects/{id}/staffsNotIn")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")

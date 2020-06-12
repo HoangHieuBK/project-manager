@@ -23,7 +23,7 @@ public class ProjectProgressServiceImpl implements ProjectProgressService{
 	}
 
 	@Override
-	public Date getLastDateOfProgjectProgress(Integer projectId) {
+	public Date getLastDateOfProjectProgress(Integer projectId) {
 		// TODO Auto-generated method stub
 		return projectProgressRepo.getLastDateOfProjectProgress(projectId);
 	}

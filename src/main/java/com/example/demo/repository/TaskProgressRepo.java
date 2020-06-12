@@ -33,7 +33,7 @@ public interface TaskProgressRepo extends JpaRepository<TaskProgress, Long> {
 	@Query("select max(t.dateLog) from TaskProgress t where t.taskId.taskId = :taskId and t.dateLog<= :moment")
 	Date findLatestTaskDateBefore(Integer taskId, Date moment);
 
-	@Query("select max(dateLog) from TaskProgress t where t.taskId.taskId= :taskId")
+	@Query("select max(t.dateLog) from TaskProgress t where t.taskId.taskId= :taskId")
 	Date getLastDate(Integer taskId);
 	
 	@Query("select max(t.dateLog) from TaskProgress t where t.taskId.taskId = :taskId and t.dateLog<= :dateLog")
