@@ -8,5 +8,4 @@ public class Notification {
 
     public Notification(String text) {
         this.text = text;
-    }
-}
+    }}
