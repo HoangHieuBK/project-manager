@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -46,9 +45,6 @@ public class AccountController {
 
 	@Autowired
 	PasswordEncoder encoder;
-
-	@Autowired
-	public JavaMailSender emailSender;
 
 	// get list account
 	@GetMapping("/accounts")
