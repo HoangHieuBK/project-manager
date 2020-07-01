@@ -1,8 +1,10 @@
 package com.example.demo.repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +23,12 @@ public interface AccountRepo extends JpaRepository<Account, Integer>{
 	
 	@Query(value = "select r from Role r where r.roleId = :roleId")
 	Role getRole(@Param("roleId") int roleId);
+
+	@Query("select a from Account a where a.accountId not in (select st.accountId from Staff st)")
+	List<Account> findAccountNotAssignStaff();
+
+	@Query("select t from Task t where t.staffId.staffId in (" +
+			"select s.staffId from Staff s where s.accountId.accountId in (" +
+			"select a.accountId from Account a where a.username = :username))")
+	List<Task> findTaskByUserName(String username);
 }

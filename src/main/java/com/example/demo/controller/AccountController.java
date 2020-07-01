@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -11,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,6 +51,15 @@ public class AccountController {
 	public List<Account> getAllAccount() {
 		List<Account> listAccount = accountService.findAllAccount();
 		return listAccount;
+	}
+
+	// get list account
+	@GetMapping("/accounts/notStaff")
+	@PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
+	public List<Account> findAccountNotAssignStaff() {
+		List<Account> listAccountNotAssignStaff = new ArrayList<>();
+		listAccountNotAssignStaff = accountService.findAccountNotAssignStaff();
+		return listAccountNotAssignStaff;
 	}
 
 	// get 1 account chi tiet

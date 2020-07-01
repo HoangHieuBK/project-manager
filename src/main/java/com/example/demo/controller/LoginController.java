@@ -62,7 +62,6 @@ public class LoginController {
 
 		String jwt = jwtProvider.generateJwtToken(authentication);
 		UserDetails userDetails  = (UserDetails) authentication.getPrincipal();
-
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities()));
 	}
 

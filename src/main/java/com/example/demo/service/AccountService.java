@@ -5,9 +5,12 @@ import java.util.Optional;
 
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Role;
+import com.example.demo.entity.Task;
 
 public interface AccountService {
 	List<Account> findAllAccount();
+
+	List<Account> findAccountNotAssignStaff();
 
 	Optional<Account> findAccountByAccountName(String accountName);
 
@@ -20,4 +23,6 @@ public interface AccountService {
 	Optional<Account> getAccountByID(int idAccount);
 	
 	Role findByRole(int idAccount);
+
+	List<Task> findTaskByUsername(String username);
 }

@@ -3,7 +3,11 @@ package com.example.demo.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Account;
@@ -17,8 +21,6 @@ public class AccountServiceImpl implements AccountService {
 	@Autowired
 	private AccountRepo accountRepo;
 
-//	@Autowired
-//	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
 	public Optional<Account> findAccountByAccountName(String accountName) {
@@ -47,6 +49,11 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
+	public List<Account> findAccountNotAssignStaff() {
+		return accountRepo.findAccountNotAssignStaff();
+	}
+
+	@Override
 	public boolean deleteAccount(int idAccount) {
 		Account account = accountRepo.getOne(idAccount);
 		if (account.equals(null) || account == null) {
@@ -64,8 +71,12 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Role findByRole(int idAccount) {
-//		Account account = accountRepo.getOne(idAccount);
 		return accountRepo.getRole(idAccount);
+	}
+
+	@Override
+	public List<Task> findTaskByUsername(String username) {
+		return accountRepo.findTaskByUserName(username);
 	}
 
 	public boolean checkEmailExistInDB(Account account) {

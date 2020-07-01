@@ -30,6 +30,7 @@ public class TaskDTO {
 	private String discription;
 	private String taskOutput;
 	private Project project;
+	private Integer projectId;
 	private Integer staffId;
 	private String staffName;
 	private Set<String> previousTask = new HashSet<>();
