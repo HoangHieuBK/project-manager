@@ -92,7 +92,7 @@ public class AccountController {
 			return new ResponseEntity<>(signUpResponse, HttpStatus.OK);
 			
 		} else {
-			return new ResponseEntity<>(new ResponseMessage("Account not found!"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new ResponseMessage("Tài khoản không tồn tại!"), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -101,12 +101,12 @@ public class AccountController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> add(@Valid @RequestBody SignUpForm signUpRequest) {
 		if (accountRepo.existsByUsername(signUpRequest.getUsername())) {
-			return new ResponseEntity<>(new ResponseMessage("Fail -> username is already taken!"),
+			return new ResponseEntity<>(new ResponseMessage("Lỗi -> tên đăng nhập đã tồn tại!"),
 					HttpStatus.BAD_REQUEST);
 		}
 
 		if (accountRepo.existsByEmail(signUpRequest.getEmail())) {
-			return new ResponseEntity<>(new ResponseMessage("Fail -> Email is already in use!"),
+			return new ResponseEntity<>(new ResponseMessage("Lỗi -> email đã được sử dụng!"),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -125,17 +125,17 @@ public class AccountController {
 			switch (role) {
 			case "admin":
 				Role adminRole = roleRepo.findByRoleName(RoleName.ROLE_ADMIN)
-						.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find."));
+						.orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản."));
 				roles.add(adminRole);
 				break;
 			case "pm":
 				Role pmRole = roleRepo.findByRoleName(RoleName.ROLE_PM)
-						.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+						.orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản"));
 				roles.add(pmRole);
 				break;
 			default:
 				Role staffRole = roleRepo.findByRoleName(RoleName.ROLE_USER)
-						.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+						.orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản"));
 				roles.add(staffRole);
 			}
 		});
@@ -143,7 +143,7 @@ public class AccountController {
 		account.setRoles(roles);
 		accountRepo.save(account);
 
-		return new ResponseEntity<>(new ResponseMessage("Create account successfully!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Tạo tài khoản thành công!"), HttpStatus.OK);
 	}
 
 	// edit 1 account
@@ -168,17 +168,17 @@ public class AccountController {
 				switch (role) {
 				case "admin":
 					Role adminRole = roleRepo.findByRoleName(RoleName.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find."));
+							.orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản."));
 					roles.add(adminRole);
 					break;
 				case "pm":
 					Role pmRole = roleRepo.findByRoleName(RoleName.ROLE_PM)
-							.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+							.orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản."));
 					roles.add(pmRole);
 					break;
 				default:
 					Role staffRole = roleRepo.findByRoleName(RoleName.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+							.orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản."));
 					roles.add(staffRole);
 				}
 			});
@@ -186,9 +186,9 @@ public class AccountController {
 			_account.setRoles(roles);
 			accountService.updateAccount(_account);
 
-			return new ResponseEntity<>(new ResponseMessage("Edit account successfully!"), HttpStatus.OK);
+			return new ResponseEntity<>(new ResponseMessage("Sửa tài khoản thành công!"), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(new ResponseMessage("Account not found!"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new ResponseMessage("Tài khoản không tồn tại!"), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -198,7 +198,7 @@ public class AccountController {
 	public ResponseEntity<?> deleteAccount(@PathVariable("id") int id) {
 		System.out.println("Delete account with ID = " + id + "...");
 		accountService.deleteAccount(id);
-		return new ResponseEntity<>(new ResponseMessage("Account has been deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Tài khoản đã được xóa!"), HttpStatus.OK);
 	}
 
 }

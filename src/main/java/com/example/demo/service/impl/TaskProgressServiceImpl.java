@@ -94,7 +94,6 @@ public class TaskProgressServiceImpl implements TaskProgressService {
             taskProgressRepo.save(sameTimeTaskProgress);
         }
         System.out.println(latestDate);
-        // nếu task có task cha thì nó là task độc lập, task cha sẽ là task phụ thuộc
         if (task.getTaskIdparent() != null) {
             TaskProgress taskParentProgress;
             int idParentTask = task.getTaskIdparent();
@@ -166,8 +165,6 @@ public class TaskProgressServiceImpl implements TaskProgressService {
                 if (tRest > tRestMax) {
                     tRestMax = tRest;
                 }
-                System.out
-                        .println("Task: " + bigTask.getTaskId() + " tRest: " + tRest / (3600L * 24L * 1000));
             }
             System.out.println("tRestMax: " + tRestMax);
 //			System.out.println("Project duration: "

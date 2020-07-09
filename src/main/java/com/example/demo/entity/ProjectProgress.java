@@ -26,7 +26,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Builder
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "progress_project")
 public class ProjectProgress implements Serializable{
@@ -55,4 +54,7 @@ public class ProjectProgress implements Serializable{
   @ManyToOne(optional = false)
   private Project projectId;
 
+  public ProjectProgress() {
+    this.progress = 0;
+  }
 }

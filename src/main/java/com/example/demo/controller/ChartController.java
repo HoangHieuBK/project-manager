@@ -57,7 +57,7 @@ public class ChartController {
     public ResponseEntity<?> listTaskProgresses(@PathVariable("id") int id) {
         List<TaskProgress> workLogList = taskProgressService.findByTaskIDOrderByDateCreateAsc(id);
         if (workLogList.isEmpty()) {
-            return new ResponseEntity<>(new ResponseMessage("TaskProgress Not Found!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseMessage("Tiến độ công việc không tồn tại!"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(workLogList, HttpStatus.OK);
     }
@@ -108,7 +108,7 @@ public class ChartController {
         Task task = taskService.findById(id);
         taskProgress.setTaskId(task);
         taskProgressService.createTaskProgress(taskProgress);
-        return new ResponseEntity<>(new ResponseMessage("Log Schedule Successfully!"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Ghi nhật kí lịch trình công việc thành công!"), HttpStatus.OK);
     }
 
 
@@ -118,7 +118,7 @@ public class ChartController {
         List<ProjectProgress> workLogList = new ArrayList<>();
         workLogList = projectProgressService.findByProjectIDOrderByDateCreateAsc(id);
         if (workLogList.isEmpty()) {
-            return new ResponseEntity<>(new ResponseMessage("List Project Progress is empty!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseMessage("Danh sách tiến độ công việc trống!"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(workLogList, HttpStatus.OK);
     }

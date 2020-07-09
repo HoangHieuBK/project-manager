@@ -117,10 +117,10 @@ public class StaffController {
 	}
 
 	@PostMapping("/staffs/add")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> addStaff(@RequestBody StaffDTO staffDTO) {
 		if (staffService.existByStaffName(staffDTO.getName())) {
-			return new ResponseEntity<>(new ResponseMessage("Fail -> Staff is already taken!"), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new ResponseMessage("Lỗi -> Nhân viên đã tồn tại!"), HttpStatus.BAD_REQUEST);
 		}
 
 		Staff staff = Staff.builder()
@@ -134,22 +134,22 @@ public class StaffController {
 
 		Optional<Department> objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName());
 		if(!objDepart.isPresent()){
-			return new ResponseEntity<>(new ResponseMessage("Fail! -> Cause: Department not find."), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new ResponseMessage("Lỗi! -> Nguyên nhân: Phòng ban không tìm thấy."), HttpStatus.BAD_REQUEST);
 		}
 		staff.setDepartmentId(objDepart.get());
 
 		Optional<Account> objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName());
 		if(!objAccount.isPresent()) {
-			return new ResponseEntity<>(new ResponseMessage("Fail! -> Cause: Account not find."), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new ResponseMessage("Lỗi! -> Nguyên nhân: Không tìm thấy tài khoản."), HttpStatus.BAD_REQUEST);
 		}
 		staff.setAccountId(objAccount.get());
 
 		staffService.save(staff);
-		return new ResponseEntity<>(new ResponseMessage("Create Staff Successfully!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Tạo nhân viên thành công!"), HttpStatus.OK);
 	}
 
 	@PutMapping("/staffs/edit/{id}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> edit(@PathVariable("id") int id, @RequestBody StaffDTO staffDTO) {
 		System.out.println("Update staff with ID = " + id + "...");
 
@@ -165,28 +165,29 @@ public class StaffController {
 
 			Optional<Department> objDepart = departmentService.findByDepartmentName(staffDTO.getDepartmentName());
 			if(!objDepart.isPresent()){
-				return new ResponseEntity<>(new ResponseMessage("Fail! -> Cause: Department not find."), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new ResponseMessage("Lỗi! -> Nguyên nhân: Phòng ban không tìm thấy."), HttpStatus.BAD_REQUEST);
 			}
 			staffData.setDepartmentId(objDepart.get());
 
 			Optional<Account> objAccount = accountService.findAccountByAccountName(staffDTO.getAccountName());
 			if(!objAccount.isPresent()) {
-				return new ResponseEntity<>(new ResponseMessage("Fail! -> Cause: Account not find."), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new ResponseMessage("Lỗi! -> Nguyên nhân: Không tìm thấy tài khoản."), HttpStatus.BAD_REQUEST);
 			}
 			staffData.setAccountId(objAccount.get());
 
-			return new ResponseEntity<>(new ResponseMessage("Edit staff successfully!"), HttpStatus.OK);
+			staffService.save(staffData);
+			return new ResponseEntity<>(new ResponseMessage("Sửa nhân viên thành công!"), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@DeleteMapping("/staffs/delete/{id}")
-	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable int id) {
 		System.out.println("Delete staff with ID = " + id + "...");
 		staffService.delete(id);
-		return new ResponseEntity<>(new ResponseMessage("Staff has been deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Nhân viên đã được xóa!"), HttpStatus.OK);
 
 	}
 

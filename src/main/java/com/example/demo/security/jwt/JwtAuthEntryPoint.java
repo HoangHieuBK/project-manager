@@ -22,7 +22,7 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 			AuthenticationException authException) throws IOException, ServletException {
 
 		logger.error("Unauthorized error. Message - {}", authException.getMessage());
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized!");
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Bạn không được xác thực!");
 	}
 
 }

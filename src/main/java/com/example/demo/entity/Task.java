@@ -47,7 +47,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -126,4 +125,7 @@ public class Task implements Serializable {
 			@JoinColumn(name = "previous_task_id") })
 	private Set<Task> previousTask = new HashSet<>();
 
+	public Task() {
+		this.taskState = 0;
+	}
 }

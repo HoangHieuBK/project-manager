@@ -57,7 +57,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Builder
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -126,4 +125,7 @@ public class Project implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
 	private Collection<Task> task;
 
+	public Project() {
+		this.projectState = 0;
+	}
 }

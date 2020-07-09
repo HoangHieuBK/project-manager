@@ -69,7 +69,7 @@ public class DepartmentController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> add(@RequestBody DepartmentDTO departmentDTO) {
 		if (departmentService.existByDepartmentName(departmentDTO.getDepartmentName())) {
-			return new ResponseEntity<>(new ResponseMessage("Fail -> DepartmentName is existed"),
+			return new ResponseEntity<>(new ResponseMessage("Lỗi -> Tên phòng ban đã tồn tại"),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -83,7 +83,7 @@ public class DepartmentController {
 		department.setStaffCollection(listStaff);
 
 		departmentService.saveDepartment(department);
-		return new ResponseEntity<>(new ResponseMessage("Create department successfully!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Tạo phòng ban thành công!"), HttpStatus.OK);
 
 	}
 
@@ -101,7 +101,7 @@ public class DepartmentController {
 			_department.setManagerName(departmentDTO.getManagerName());
 			_department.setDiscription(departmentDTO.getDescription());
 			departmentService.updateDepartment(_department);
-			return new ResponseEntity<>(new ResponseMessage("Edit department successfully!"), HttpStatus.OK);
+			return new ResponseEntity<>(new ResponseMessage("Sửa phòng ban thành công!"), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -112,7 +112,7 @@ public class DepartmentController {
 	public ResponseEntity<?> delete(@PathVariable("id") int id) {
 		System.out.println("Delete department with ID = " + id + "...");
 		departmentService.deleteDepartment(id);
-		return new ResponseEntity<>(new ResponseMessage("Department has been deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Phòng ban đã được xóa!"), HttpStatus.OK);
 	}
 
 }

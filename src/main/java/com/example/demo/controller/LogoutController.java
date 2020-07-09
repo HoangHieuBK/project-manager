@@ -25,8 +25,8 @@ public class LogoutController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
-            return new ResponseEntity<>(new ResponseMessage("Logout success!"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("Đăng xuất thành công!"), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ResponseMessage("Logout fail"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseMessage("Đăng xuất thất bại"), HttpStatus.BAD_REQUEST);
     }
 }

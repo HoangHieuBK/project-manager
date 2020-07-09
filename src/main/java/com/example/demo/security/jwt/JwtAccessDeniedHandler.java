@@ -20,7 +20,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
             throws IOException, ServletException {
 
         logger.error("Access denied!", accessDeniedException.getMessage());
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not authorized to perform this action");
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn không có quyền thực hiện hành động này");
 
     }
 }

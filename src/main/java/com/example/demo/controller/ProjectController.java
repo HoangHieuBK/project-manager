@@ -84,7 +84,7 @@ public class ProjectController {
 
 			return new ResponseEntity<>(projectDTO, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(new ResponseMessage("Project not found!"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new ResponseMessage("Dự án không tồn tại!"), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -92,11 +92,11 @@ public class ProjectController {
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> addProject(@RequestBody ProjectDTO projectDTO) {
 		if (projectService.existByProjectName(projectDTO.getProjectName())) {
-			return new ResponseEntity<>(new ResponseMessage("Fail -> Project is already existed!"),
+			return new ResponseEntity<>(new ResponseMessage("Lỗi -> Dự án đã tồn tại!"),
 					HttpStatus.BAD_REQUEST);
 		}
 		if (projectDTO.getDeadlineDate().before(projectDTO.getStartDate())) {
-			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+			return new ResponseEntity<>(new ResponseMessage("Ngày kết thúc không thể trước ngày bắt đầu"),
 					HttpStatus.BAD_REQUEST);
 		}
 		Project project = Project.builder()
@@ -106,10 +106,11 @@ public class ProjectController {
 						  .deadlineDate(projectDTO.getDeadlineDate())
 						  .description(projectDTO.getDescription())
 						  .projectOutput(projectDTO.getProjectOutput())
+				          .projectState(0)
 						  .build();
 
 		projectService.saveProject(project);
-		return new ResponseEntity<>(new ResponseMessage("Create Project Successfully!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Tạo dự án thành công!"), HttpStatus.OK);
 	}
 
 
@@ -119,7 +120,7 @@ public class ProjectController {
 	public ResponseEntity<?> editProject(@PathVariable("id") int id, @RequestBody ProjectDTO projectDTO) {
 
 		if (projectDTO.getDeadlineDate().before(projectDTO.getStartDate())) {
-			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+			return new ResponseEntity<>(new ResponseMessage("Ngày kết thúc không thể trước ngày bắt đầu!"),
 					HttpStatus.BAD_REQUEST);
 		}
 		System.out.println("Update project with ID = " + id + "...");
@@ -137,9 +138,9 @@ public class ProjectController {
 
 			projectService.saveProject(_project);
 
-			return new ResponseEntity<>(new ResponseMessage("Edit project successfully!"), HttpStatus.OK);
+			return new ResponseEntity<>(new ResponseMessage("Sửa dự án thành công!"), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(new ResponseMessage("Project not found!"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new ResponseMessage("Dự án không tồn tại!"), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -148,7 +149,7 @@ public class ProjectController {
 	public ResponseEntity<?> deleteProject(@PathVariable int id) {
 		System.out.println("Delete project with ID = " + id + "...");
 		projectService.deleteProjectById(id);
-		return new ResponseEntity<>(new ResponseMessage("Project has been deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Dự án đã được xóa!"), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/projects/{id}/staffs")
@@ -211,7 +212,7 @@ public class ProjectController {
 	public ResponseEntity<?> addTaskToProject(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
 
 		if (Util.checkEndDateBeforeStartDate(taskDTO.getDateStart(), taskDTO.getDeadlineDate())) {
-			return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+			return new ResponseEntity<>(new ResponseMessage("Ngày kết thúc không thể trước ngày bắt đầu!"),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -223,6 +224,7 @@ public class ProjectController {
 					.deadlineDate(taskDTO.getDeadlineDate())
 					.discription(taskDTO.getDiscription())
 					.taskOutput(taskDTO.getTaskOutput())
+				    .taskState(0)
 					.build();
 
 		Project project = projectService.getProjecByiD(id).get();
@@ -247,7 +249,7 @@ public class ProjectController {
 		task.setPreviousTask(listPreviousTaskOfProject);
 
 		taskService.saveTask(task);
-		return new ResponseEntity<>(new ResponseMessage("Create Task Successfully!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Tạo công việc thành công!"), HttpStatus.OK);
 	}
 
 
@@ -279,14 +281,14 @@ public class ProjectController {
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> addStaffInproject(@PathVariable int id, @PathVariable int idStaff) {
 		projectService.addStaffInProject(id, idStaff);
-		return new ResponseEntity<>(new ResponseMessage("Staff has been added into project!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Nhân viên đã được thêm vào dự án!"), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/projects/{id}/staff/{idStaff}/delete")
 	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteStaffInProject(@PathVariable int id, @PathVariable int idStaff) {
 		projectService.deleteStaffIdInProject(idStaff, id);
-		return new ResponseEntity<>(new ResponseMessage("Staff has been deleted from project!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Nhân viên đã được xóa khỏi dự án!"), HttpStatus.OK);
 	}
 
 }

@@ -48,7 +48,7 @@ public class TaskController {
     public ResponseEntity<?> addTaskToStaff(@PathVariable("id") int id, @PathVariable("idstaff") int idstaff,
                                             @RequestBody TaskDTO taskDTO) {
         if (taskDTO.getDeadlineDate().before(taskDTO.getDateStart())) {
-            return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+            return new ResponseEntity<>(new ResponseMessage("Ngày kết thúc không thể trước ngày bắt đầu!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -60,6 +60,7 @@ public class TaskController {
                 .deadlineDate(taskDTO.getDeadlineDate())
                 .discription(taskDTO.getDiscription())
                 .taskOutput(taskDTO.getTaskOutput())
+                .taskState(0)
                 .build();
 
         Project project = projectService.getProjecByiD(id).get();
@@ -83,14 +84,14 @@ public class TaskController {
         task.setPreviousTask(listPreviousTaskOfProject);
 
         taskService.saveTask(task);
-        return new ResponseEntity<>(new ResponseMessage("Create Task Successfully!"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Tạo công việc thành công!"), HttpStatus.OK);
     }
 
     @PostMapping(value = "/tasks/{id}/addsubtask")
     @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> addSubTask(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
         if (taskDTO.getDeadlineDate().before(taskDTO.getDateStart())) {
-            return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+            return new ResponseEntity<>(new ResponseMessage("Ngày kết thúc không thể trước ngày bắt đầu!"),
                     HttpStatus.BAD_REQUEST);
         }
         Task parentTask = taskService.findById(id);
@@ -102,6 +103,7 @@ public class TaskController {
                 .deadlineDate(taskDTO.getDeadlineDate())
                 .discription(taskDTO.getDiscription())
                 .taskOutput(taskDTO.getTaskOutput())
+                .taskState(0)
                 .build();
 
         if (parentTask != null) {
@@ -122,14 +124,14 @@ public class TaskController {
         task.setPreviousTask(listPreviousTaskOfProject);
 
         taskService.saveTask(task);
-        return new ResponseEntity<>(new ResponseMessage("Create SubTask Successfully!"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Tạo công việc con thành công!"), HttpStatus.OK);
     }
 
     @PutMapping(value = "/task/{id}/edit")
     @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> editTaskForProject(@PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
         if (taskDTO.getDeadlineDate().before(taskDTO.getDateStart())) {
-            return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+            return new ResponseEntity<>(new ResponseMessage("Ngày kết thúc không thể trước ngày bắt đầu!"),
                     HttpStatus.BAD_REQUEST);
         }
         Task task = taskService.findById(id);
@@ -159,9 +161,9 @@ public class TaskController {
             task.setPreviousTask(listPreviousTaskOfProject);
 
             taskService.saveTask(task);
-            return new ResponseEntity<>(new ResponseMessage("Edit Task Successfully!"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("Sửa công việc thành công!"), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new ResponseMessage("Task not found!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseMessage("Không tìm thấy công việc!"), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -169,7 +171,7 @@ public class TaskController {
     @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> editTaskForStaff(@PathVariable("idStaff") int idStaff, @PathVariable("id") int id, @RequestBody TaskDTO taskDTO) {
         if (taskDTO.getDeadlineDate().before(taskDTO.getDateStart())) {
-            return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+            return new ResponseEntity<>(new ResponseMessage("Ngày kết thúc không thể trước ngày bắt đầu!"),
                     HttpStatus.BAD_REQUEST);
         }
         Task task = taskService.findById(id);
@@ -194,9 +196,9 @@ public class TaskController {
             task.setPreviousTask(listPreviousTaskOfProject);
 
             taskService.saveTask(task);
-            return new ResponseEntity<>(new ResponseMessage("Edit Task Successfully!"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("Sửa công việc thành công!"), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new ResponseMessage("Task not found!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseMessage("Công việc không tìm thấy!"), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -220,13 +222,13 @@ public class TaskController {
         for (int i = 0; i < listTaskOfProject.size(); i++) {
             if (_task.getTaskId() == listTaskOfProject.get(i).getTaskIdparent()) {
                 System.out.println("task nay dang co task con nen ban phai xoa task con truoc !");
-                String message = "Task " + _task.getTaskName()
-                        + " has sub task. If you want to delete this task, you must delete this previous sub task!";
+                String message = "Công việc " + _task.getTaskName()
+                        + " này đang có công việc con. Nếu bạn muốn xóa công việc này, bạn phải xóa công việc con trước!";
                 return new ResponseEntity<>(new ResponseMessage(message), HttpStatus.PRECONDITION_REQUIRED);
             }
         }
         taskService.deleteTask(idtask);
-        return new ResponseEntity<>(new ResponseMessage("Delete Task Successfully!"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Xóa công việc thành công!"), HttpStatus.OK);
     }
 
     @PostMapping(value = "staffs/{idstaff}/tasks/{taskId}/assign")
@@ -240,7 +242,7 @@ public class TaskController {
             ;
         }
         taskService.saveTask(task);
-        return new ResponseEntity<>(new ResponseMessage("Assign Staff For Task Successfully!"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Chỉ định nhân viên làm công việc thành công!"), HttpStatus.OK);
     }
 
     @GetMapping(value = "/projects/{id}/previousTasks")

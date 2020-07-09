@@ -44,10 +44,10 @@ public class TimeWorkController {
         try {
             listEvents = eventsService.findByIdStaff(id);
         } catch (Exception e) {
-            System.out.println("khoong co event nao !");
+            System.out.println("không có event nào !");
         }
         if (listEvents.isEmpty()) {
-            return new ResponseEntity<>(new ResponseMessage("Not Schedule of staff!"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseMessage("Nhân viên chưa có lịch trình làm việc!"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(listEvents, HttpStatus.OK);
     }
@@ -56,7 +56,7 @@ public class TimeWorkController {
     @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> addEvent(@RequestBody EventDTO eventDTO, @PathVariable("id") int id) {
         if (eventDTO.getEnd().before(eventDTO.getStart())) {
-            return new ResponseEntity<>(new ResponseMessage("The end date cannot be before the start date!"),
+            return new ResponseEntity<>(new ResponseMessage("Ngày kết thúc không thể trước ngày bắt đầu!"),
                     HttpStatus.BAD_REQUEST);
         }
         Events event = Events.builder()
@@ -70,6 +70,6 @@ public class TimeWorkController {
         event.setStaffId(staff);
         eventsService.save(event);
 
-        return new ResponseEntity<>(new ResponseMessage("Create Event Successfully!"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Tạo sự kiện thành công!"), HttpStatus.OK);
     }
 }

@@ -62,19 +62,21 @@ public class LoginController {
 
 		String jwt = jwtProvider.generateJwtToken(authentication);
 		UserDetails userDetails  = (UserDetails) authentication.getPrincipal();
-		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities()));
+		String username = userDetails.getUsername();
+		Account account = accountRepo.findAccountByUsername(username).get();
+		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), account.getAccountName(), userDetails.getAuthorities()));
 	}
 
 	// dang ky
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
 		if (accountRepo.existsByUsername(signUpRequest.getUsername())) {
-			return new ResponseEntity<>(new ResponseMessage("Fail -> username is already taken!"),
+			return new ResponseEntity<>(new ResponseMessage("Lỗi -> tên đăng nhập đã sử dụng!"),
 					HttpStatus.BAD_REQUEST);
 		}
 
 		if (accountRepo.existsByEmail(signUpRequest.getEmail())) {
-			return new ResponseEntity<>(new ResponseMessage("Fail -> Email is already in use!"),
+			return new ResponseEntity<>(new ResponseMessage("Lỗi -> email đã sử dụng!"),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -91,15 +93,15 @@ public class LoginController {
 		strRoles.forEach(role -> {
 			switch (role) {
 			case "admin":
-				Role adminRole = roleRepo.findByRoleName(RoleName.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find."));
+				Role adminRole = roleRepo.findByRoleName(RoleName.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản."));
 				roles.add(adminRole);
 				break;
 			case "pm": 
-				Role pmRole = roleRepo.findByRoleName(RoleName.ROLE_PM).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+				Role pmRole = roleRepo.findByRoleName(RoleName.ROLE_PM).orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản."));
 				roles.add(pmRole);
 				break;
 			default:
-				Role staffRole = roleRepo.findByRoleName(RoleName.ROLE_USER).orElseThrow(() -> new RuntimeException("Fail! -> Cause: Account Role not find"));
+				Role staffRole = roleRepo.findByRoleName(RoleName.ROLE_USER).orElseThrow(() -> new RuntimeException("Lỗi! -> Nguyên nhân: Không tìm thấy quyền của tài khoản."));
 				roles.add(staffRole);
 			}
 		});
@@ -107,6 +109,6 @@ public class LoginController {
 		account.setRoles(roles);
 		accountRepo.save(account);
 		
-		return new ResponseEntity<>(new ResponseMessage("Account registered successfully!"), HttpStatus.OK);
+		return new ResponseEntity<>(new ResponseMessage("Đăng kí tài khoản thành công!"), HttpStatus.OK);
 	}
 }
